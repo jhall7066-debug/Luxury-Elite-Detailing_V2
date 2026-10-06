@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://luxuryelitedetailing.netlify.app/sitemap.xml
