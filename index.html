@@ -16,8 +16,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/style.css?v=1" />
-  <link rel="stylesheet" href="assets/detailing.css?v=1" />
+  <link rel="stylesheet" href="assets/style.css?v=2" />
+  <link rel="stylesheet" href="assets/detailing.css?v=2" />
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -173,8 +173,8 @@
       </div>
       <div class="split-media reveal">
         <div class="ba-slider" style="aspect-ratio:4/5">
-          <img src="assets/after-01.jpg" alt="Same cargo area after pet hair removal and vacuum" loading="lazy" />
-          <img class="ba-before" src="assets/before-01.jpg" alt="SUV cargo area covered in pet hair" loading="lazy" />
+          <img src="assets/after-01.jpg?v=2" alt="Same cargo area after pet hair removal and vacuum" loading="lazy" />
+          <img class="ba-before" src="assets/before-01.jpg?v=2" alt="SUV cargo area covered in pet hair" loading="lazy" />
           <span class="ba-tag">Before</span><span class="ba-tag after">After</span>
           <span class="ba-line"></span><span class="ba-knob" aria-hidden="true">‹ ›</span>
           <input type="range" min="0" max="100" value="50" aria-label="Drag to compare before and after" />
@@ -188,68 +188,97 @@
     <div class="container">
       <div class="center reveal">
         <span class="eyebrow">Packages &amp; Pricing</span>
-        <h2>Pick the clean your car needs</h2>
-        <p class="lead">Basic for a refresh, platinum for a deep clean, or a full detail for both inside and out.</p>
+        <h2>Simple prices. No surprises.</h2>
+        <p class="lead">Pick a package, tap book, and we'll confirm a time. Mobile service across Cincinnati and Northern Kentucky.</p>
       </div>
-      <div class="pkg-grid">
-        <article class="pkg-card reveal">
+      <div class="pkg-grid pk-grid">
+        <article class="pkg-card pk reveal">
           <span class="pkg-tier">Interior</span>
           <h3>Interior Detail</h3>
-          <p class="pkg-for">Inside only, from a quick refresh to a deep clean.</p>
-          <div class="pkg-price"><small>from</small>$65</div>
-          <div class="pkg-meta"><span>Basic $65</span><span>Platinum $100</span></div>
-          <ul class="pkg-includes">
-            <li class="pkg-sub">Basic · $65</li>
-            <li>Full vacuum</li>
-            <li>Deep wipe down</li>
-            <li>Odor refresh</li>
-            <li class="pkg-sub">Platinum · $100</li>
-            <li>Deep vacuum &amp; full wipe down</li>
-            <li>Interior glass cleaned</li>
-            <li>Interior shine applied</li>
-            <li>Odor elimination</li>
-          </ul>
-          <a class="btn btn-ghost" href="#quote">Request a Booking</a>
+          <p class="pkg-for">Crumbs, dust and smells gone. Pick your level.</p>
+          <div class="pk-toggle" role="group" aria-label="Interior Detail options">
+            <button type="button" class="on" data-opt="basic" aria-pressed="true">Basic</button>
+            <button type="button" class="" data-opt="platinum" aria-pressed="false">Platinum</button>
+          </div>
+          <div class="pk-opt" data-opt="basic" data-book="Basic Interior ($65)">
+            <div class="pk-price">$65</div>
+            <ul class="pkg-includes">
+              <li>Full vacuum</li>
+              <li>Deep wipe down</li>
+              <li>Odor refresh</li>
+            </ul>
+          </div>
+          <div class="pk-opt" data-opt="platinum" data-book="Platinum Interior ($100)" hidden>
+            <div class="pk-price">$100</div>
+            <ul class="pkg-includes">
+              <li>Deep vacuum &amp; full wipe down</li>
+              <li>Interior glass cleaned</li>
+              <li>Interior shine applied</li>
+              <li>Odor elimination</li>
+            </ul>
+          </div>
+          <a class="btn btn-ghost pk-book" href="#quote">Book Basic Interior · $65</a>
         </article>
-        <article class="pkg-card featured reveal">
-          <span class="pkg-ribbon">Inside + Out</span>
-          <span class="pkg-tier">Full Detail</span>
+        <article class="pkg-card pk featured reveal">
+          <span class="pkg-ribbon">Best Value</span>
+          <span class="pkg-tier">Inside + Out</span>
           <h3>Full Detail</h3>
-          <p class="pkg-for">Full interior + exterior service with a platinum-level finish.</p>
-          <div class="pkg-price"><small>from</small>$140</div>
-          <div class="pkg-meta"><span>Sedans &amp; SUVs $140</span><span>Trucks $200</span></div>
-          <ul class="pkg-includes">
-            <li>Full interior service</li>
-            <li>Full exterior service</li>
-            <li>Platinum-level finish</li>
-            <li class="pkg-sub">Pricing</li>
-            <li>Sedans &amp; SUVs · $140</li>
-            <li>Trucks · $200</li>
-          </ul>
-          <a class="btn btn-gold" href="#quote">Request a Booking</a>
+          <p class="pkg-for">Inside and out with a platinum-level finish. The one most cars need.</p>
+          <div class="pk-toggle" role="group" aria-label="Full Detail options">
+            <button type="button" class="on" data-opt="car" aria-pressed="true">Sedan / SUV</button>
+            <button type="button" class="" data-opt="truck" aria-pressed="false">Truck</button>
+          </div>
+          <div class="pk-opt" data-opt="car" data-book="Full Detail: sedan/SUV ($140)">
+            <div class="pk-price">$140</div>
+            <p class="pk-save">Save $60 vs. platinum interior + exterior</p>
+            <ul class="pkg-includes">
+              <li>Full interior service</li>
+              <li>Full exterior service</li>
+              <li>Platinum-level finish inside and out</li>
+            </ul>
+          </div>
+          <div class="pk-opt" data-opt="truck" data-book="Full Detail: truck ($200)" hidden>
+            <div class="pk-price">$200</div>
+            <ul class="pkg-includes">
+              <li>Full interior service</li>
+              <li>Full exterior service</li>
+              <li>Platinum-level finish inside and out</li>
+            </ul>
+          </div>
+          <a class="btn btn-gold pk-book" href="#quote">Book Full Detail · $140</a>
         </article>
-        <article class="pkg-card reveal">
+        <article class="pkg-card pk reveal">
           <span class="pkg-tier">Exterior</span>
           <h3>Exterior Detail</h3>
-          <p class="pkg-for">A foam wash and shine, or a two-pass deep clean.</p>
-          <div class="pkg-price"><small>from</small>$65</div>
-          <div class="pkg-meta"><span>Basic $65</span><span>Platinum $100</span></div>
-          <ul class="pkg-includes">
-            <li class="pkg-sub">Basic · $65</li>
-            <li>Foam wash</li>
-            <li>Tire shine</li>
-            <li class="pkg-sub">Platinum · $100</li>
-            <li>Foam wash (2x for deep clean)</li>
-            <li>Full wipe down (2x)</li>
-            <li>Tire shine</li>
-            <li>Exterior glass cleaned</li>
-            <li>Door jambs cleaned</li>
-          </ul>
-          <a class="btn btn-ghost" href="#quote">Request a Booking</a>
+          <p class="pkg-for">Foam wash and shine, or a two-pass deep clean.</p>
+          <div class="pk-toggle" role="group" aria-label="Exterior Detail options">
+            <button type="button" class="on" data-opt="basic" aria-pressed="true">Basic</button>
+            <button type="button" class="" data-opt="platinum" aria-pressed="false">Platinum</button>
+          </div>
+          <div class="pk-opt" data-opt="basic" data-book="Basic Exterior ($65)">
+            <div class="pk-price">$65</div>
+            <ul class="pkg-includes">
+              <li>Foam wash</li>
+              <li>Tire shine</li>
+            </ul>
+          </div>
+          <div class="pk-opt" data-opt="platinum" data-book="Platinum Exterior ($100)" hidden>
+            <div class="pk-price">$100</div>
+            <ul class="pkg-includes">
+              <li>Foam wash (2x for deep clean)</li>
+              <li>Full wipe down (2x)</li>
+              <li>Tire shine</li>
+              <li>Exterior glass cleaned</li>
+              <li>Door jambs cleaned</li>
+            </ul>
+          </div>
+          <a class="btn btn-ghost pk-book" href="#quote">Book Basic Exterior · $65</a>
         </article>
       </div>
+      <ul class="pk-trust reveal">
+        <li>✓ Mobile: we come to you</li><li>✓ Or bring it to our location</li><li>✓ Add pet hair removal or seat extraction to any package</li>
+      </ul>
       <div class="center" style="margin-top:34px"><a class="btn btn-ghost btn-lg" href="services.html">See All Services</a></div>
-      <p class="pkg-note">Add-ons like pet hair removal, seat extraction and ceramic coating are priced per vehicle. Ask when you book.</p>
     </div>
   </section>
 
@@ -275,9 +304,9 @@
         <p class="lead">A few recent jobs from around Cincinnati and Northern Kentucky.</p>
       </div>
       <div class="gallery" style="margin-top:40px">
-        <div class="gallery-item reveal" data-lightbox="assets/gallery-01.jpg"><img src="assets/gallery-01.jpg" alt="Mercedes-AMG interior with red seats after detailing" loading="lazy" /></div>
-        <div class="gallery-item reveal" data-lightbox="assets/gallery-02.jpg"><img src="assets/gallery-02.jpg" alt="Dodge Durango SRT exterior after hand wash" loading="lazy" /></div>
-        <div class="gallery-item reveal" data-lightbox="assets/gallery-03.jpg"><img src="assets/gallery-03.jpg" alt="GMC Yukon Denali after exterior detail" loading="lazy" /></div>
+        <div class="gallery-item reveal" data-lightbox="assets/gallery-01.jpg?v=2"><img src="assets/gallery-01.jpg?v=2" alt="BMW X4 driver side with red leather seat after interior detail" loading="lazy" /></div>
+        <div class="gallery-item reveal" data-lightbox="assets/gallery-02.jpg?v=2"><img src="assets/gallery-02.jpg?v=2" alt="Dodge Durango SRT exterior after hand wash" loading="lazy" /></div>
+        <div class="gallery-item reveal" data-lightbox="assets/gallery-03.jpg?v=2"><img src="assets/gallery-03.jpg?v=2" alt="GMC Yukon Denali after exterior detail" loading="lazy" /></div>
       </div>
       <div class="center" style="margin-top:40px; display:flex; flex-wrap:wrap; gap:12px; justify-content:center">
         <a class="btn btn-ghost btn-lg" href="our-work.html">View Full Gallery</a>
@@ -418,7 +447,8 @@
     <a class="mob-quote" href="#quote">Request a Booking</a>
   </div>
 
-  <script src="assets/script.js"></script>
-  <script src="assets/detailing.js"></script>
+  <script src="assets/script.js?v=2"></script>
+  <script src="assets/detailing.js?v=2"></script>
+  <script src="assets/led.js?v=2"></script>
 </body>
 </html>
