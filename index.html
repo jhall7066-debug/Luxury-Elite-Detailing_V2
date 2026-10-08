@@ -1,938 +1,455 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="robots" content="noindex, nofollow" />
-<meta name="theme-color" content="#0a0b0e" />
-<title>LED Detailing CRM</title>
-<link rel="icon" href="../assets/logo.png" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-<style>
-:root{
-  --bg:#0a0b0e; --surface:#12151b; --surface2:#171b22; --surface3:#1e232c; --line:#262b34;
-  --ink:#eef0f3; --muted:#9ea5b1; --faint:#6c7480;
-  --pink:#F196E1; --blue:#5E9CDA; --green:#5ccf9a; --amber:#f2c260; --red:#ee6a7a;
-  --r:14px; --shadow:0 12px 34px rgba(0,0,0,.5);
-  --head:"Sora","Inter",system-ui,sans-serif; --body:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%}
-body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5;min-height:100vh;display:grid;grid-template-columns:236px 1fr}
-button,input,select,textarea{font:inherit;color:inherit}
-button{cursor:pointer;background:none;border:0}
-[hidden]{display:none!important}
-a{color:inherit;text-decoration:none}
-ul{list-style:none}
-h1,h2,h3{font-family:var(--head);font-weight:600;letter-spacing:-.01em;line-height:1.2}
-svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
-
-/* ---------- sidebar ---------- */
-.side{position:sticky;top:0;height:100vh;background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:18px 14px}
-.brand{display:flex;align-items:center;gap:10px;padding:2px 6px 18px}
-.brand img{height:44px;width:auto}
-.brand b{font-family:var(--head);font-size:1.02rem;display:block;line-height:1.05}
-.brand small{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);font-weight:600}
-.nav{display:flex;flex-direction:column;gap:2px}
-.nav button{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;color:var(--muted);font-weight:600;font-size:.92rem;text-align:left;position:relative}
-.nav button:hover{background:var(--surface2);color:var(--ink)}
-.nav button.on{background:linear-gradient(90deg,rgba(241,150,225,.16),rgba(94,156,218,.08));color:var(--ink);box-shadow:inset 3px 0 0 var(--pink)}
-.nav .badge{margin-left:auto;background:var(--pink);color:#18101a;border-radius:99px;font-size:.7rem;font-weight:700;padding:1px 7px;min-width:20px;text-align:center}
-.side-foot{margin-top:auto;font-size:.78rem;color:var(--faint);padding:10px 8px;border-top:1px solid var(--line)}
-.side-foot button{display:block;color:var(--blue);font-weight:600;font-size:.78rem;margin-top:4px}
-
-/* ---------- main ---------- */
-main{min-width:0;padding:0 28px 60px}
-.top{position:sticky;top:0;z-index:20;background:rgba(10,11,14,.88);backdrop-filter:blur(12px);display:flex;align-items:center;gap:14px;padding:16px 0;border-bottom:1px solid var(--line);margin-bottom:24px}
-.top h1{font-size:1.45rem;margin-right:auto}
-.search{position:relative;width:min(300px,38vw)}
-.search input{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:9px 14px 9px 38px;outline:none}
-.search input:focus{border-color:var(--blue)}
-.search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--faint);width:16px;height:16px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:.88rem;padding:10px 18px;border-radius:99px;border:1.5px solid transparent;white-space:nowrap;transition:.18s}
-.btn-pink{background:var(--pink);color:#1a0f19}
-.btn-pink:hover{background:#f7b0ea;transform:translateY(-1px)}
-.btn-ghost{border-color:var(--line);color:var(--ink);background:var(--surface)}
-.btn-ghost:hover{border-color:var(--blue);color:var(--blue)}
-.btn-danger{color:var(--red);border-color:rgba(238,106,122,.4)}
-.btn-danger:hover{background:rgba(238,106,122,.12)}
-.btn-sm{padding:6px 12px;font-size:.78rem}
-
-/* ---------- common ---------- */
-.grid{display:grid;gap:16px}
-.grid>*{min-width:0}
-.kpis{grid-template-columns:repeat(4,1fr)}
-.two{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px}
-.panel h2{font-size:1rem;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.panel h2 .sub{margin-left:auto;font-family:var(--body);font-weight:500;font-size:.78rem;color:var(--faint)}
-.kpi .lab{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
-.kpi .val{font-family:var(--head);font-size:1.9rem;font-weight:600;margin:6px 0 2px;line-height:1.1}
-.kpi .note{font-size:.8rem;color:var(--faint)}
-.kpi.a .val{color:var(--pink)} .kpi.b .val{color:var(--blue)} .kpi.c .val{color:var(--green)} .kpi.d .val{color:var(--amber)}
-.muted{color:var(--muted)} .faint{color:var(--faint)}
-.empty{color:var(--faint);text-align:center;padding:26px 10px;font-size:.9rem}
-.row{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--line)}
-.row:first-of-type{border-top:0}
-.row .grow{flex:1;min-width:0}
-.row .t{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.row .s{font-size:.82rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.row.click{cursor:pointer} .row.click:hover .t{color:var(--pink)}
-.dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;background:var(--blue)}
-.dot.pink{background:var(--pink)} .dot.green{background:var(--green)} .dot.amber{background:var(--amber)} .dot.red{background:var(--red)}
-.tag{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:99px;background:var(--surface3);color:var(--muted);white-space:nowrap}
-.tag.pink{background:rgba(241,150,225,.16);color:var(--pink)} .tag.blue{background:rgba(94,156,218,.16);color:var(--blue)}
-.tag.green{background:rgba(92,207,154,.15);color:var(--green)} .tag.amber{background:rgba(242,194,96,.15);color:var(--amber)} .tag.red{background:rgba(238,106,122,.15);color:var(--red)}
-.bars{display:flex;align-items:flex-end;gap:12px;height:150px;padding-top:8px}
-.bars .bc{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:6px;font-size:.74rem;color:var(--muted)}
-.bars .bar{width:100%;max-width:46px;border-radius:7px 7px 2px 2px;background:linear-gradient(180deg,var(--pink),var(--blue));min-height:3px}
-.bars .bv{color:var(--ink);font-weight:600;font-size:.74rem}
-
-/* ---------- pipeline ---------- */
-.board{display:grid;grid-template-columns:repeat(5,minmax(230px,1fr));gap:14px;overflow-x:auto;padding-bottom:12px;align-items:start}
-.col{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px;min-height:200px}
-.col.over{border-color:var(--pink);background:rgba(241,150,225,.05)}
-.col-h{display:flex;align-items:center;gap:8px;margin-bottom:12px;font-family:var(--head);font-weight:600;font-size:.9rem}
-.col-h .sum{margin-left:auto;font-family:var(--body);font-weight:500;font-size:.76rem;color:var(--faint)}
-.col-h .n{background:var(--surface3);border-radius:99px;font-size:.72rem;padding:1px 8px;color:var(--muted);font-family:var(--body)}
-.card{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;cursor:pointer;transition:border-color .15s}
-.card:hover{border-color:var(--blue)}
-.card.dragging{opacity:.4}
-.card .cn{font-weight:700;margin-bottom:1px}
-.card .cv{font-size:.82rem;color:var(--muted)}
-.card .cm{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;align-items:center}
-.card .cm .price{margin-left:auto;font-weight:700;font-family:var(--head)}
-.card .ca{display:flex;gap:6px;margin-top:10px}
-.stage-new{border-left:3px solid var(--pink)} .stage-quoted{border-left:3px solid var(--amber)} .stage-booked{border-left:3px solid var(--blue)} .stage-completed{border-left:3px solid var(--green)} .stage-lost{border-left:3px solid var(--faint)}
-
-/* ---------- schedule ---------- */
-.wk{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-.wk h2{font-size:1.05rem;margin-right:auto}
-.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px}
-.day{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px;min-height:150px}
-.day.today{border-color:var(--pink);box-shadow:0 0 0 1px rgba(241,150,225,.3)}
-.day-h{display:flex;align-items:baseline;gap:6px;font-size:.78rem;color:var(--muted);margin-bottom:8px;font-weight:600}
-.day-h b{font-family:var(--head);font-size:1.15rem;color:var(--ink)}
-.day-h button{margin-left:auto;color:var(--faint);font-size:1.1rem;line-height:1}
-.day-h button:hover{color:var(--pink)}
-.ev{background:var(--surface2);border-left:3px solid var(--blue);border-radius:8px;padding:7px 9px;margin-bottom:7px;font-size:.8rem;cursor:pointer}
-.ev:hover{background:var(--surface3)}
-.ev.completed{border-left-color:var(--green)}
-.ev b{display:block;font-size:.82rem}
-.ev .tm{color:var(--pink);font-weight:700;font-size:.74rem}
-.ev .ls{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
-
-/* ---------- tables ---------- */
-.tbl{width:100%;border-collapse:collapse}
-.tbl th{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);font-weight:600}
-.tbl td{padding:12px;border-bottom:1px solid var(--line);vertical-align:middle}
-.tbl tr.click{cursor:pointer} .tbl tr.click:hover td{background:var(--surface2)}
-.tbl .nm{font-weight:700} .tbl .sub{color:var(--muted);font-size:.8rem}
-.num{text-align:right;font-variant-numeric:tabular-nums}
-
-/* ---------- forms / modal ---------- */
-#modal,#modal2{position:relative;z-index:100}
-.scrim{position:fixed;inset:0;background:rgba(3,4,6,.72);backdrop-filter:blur(3px);display:flex;align-items:flex-start;justify-content:center;padding:4vh 14px;overflow-y:auto}
-#modal2 .scrim{z-index:110}
-.sheet{background:var(--surface);border:1px solid var(--line);border-radius:18px;width:100%;max-width:640px;box-shadow:var(--shadow);padding:22px;animation:pop .16s ease}
-.sheet.sm{max-width:460px}
-@keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.sheet-h{display:flex;align-items:center;gap:10px;margin-bottom:16px}
-.sheet-h h2{font-size:1.2rem;margin-right:auto}
-.x{color:var(--muted);font-size:1.5rem;line-height:1;padding:0 6px}
-.x:hover{color:var(--ink)}
-.f{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.fld{display:flex;flex-direction:column;gap:5px}
-.fld.full{grid-column:1/-1}
-.fld label,.lbl{font-size:.74rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-input[type=text],input[type=tel],input[type=email],input[type=number],input[type=date],input[type=time],select,textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;outline:none;color-scheme:dark}
-input:focus,select:focus,textarea:focus{border-color:var(--blue)}
-textarea{min-height:76px;resize:vertical}
-.chk{display:flex;flex-wrap:wrap;gap:8px}
-.chk label{display:flex;align-items:center;gap:7px;background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:6px 13px;font-size:.84rem;text-transform:none;letter-spacing:0;color:var(--ink);font-weight:500;cursor:pointer}
-.chk input{accent-color:var(--pink)}
-.chk label:has(input:checked){border-color:var(--pink);background:rgba(241,150,225,.1)}
-.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;align-items:center}
-.actions .sp{margin-left:auto}
-.sep{border:0;border-top:1px solid var(--line);margin:18px 0}
-.msgs{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
-
-/* ---------- settings ---------- */
-.set-row{display:grid;grid-template-columns:1fr 110px 36px;gap:8px;margin-bottom:8px}
-.set-tpl{margin-bottom:14px}
-.set-tpl textarea{min-height:112px}
-
-/* ---------- auth ---------- */
-#auth{position:fixed;inset:0;z-index:300;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:20px}
-#auth[hidden]{display:none}
-.auth-box{width:100%;max-width:380px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:28px;box-shadow:var(--shadow)}
-.auth-box img{height:72px;margin:0 auto 10px;display:block}
-.auth-box h2{text-align:center;font-size:1.25rem;margin-bottom:4px}
-.auth-box p.sub{text-align:center;color:var(--muted);font-size:.86rem;margin-bottom:20px}
-.auth-box .fld{margin-bottom:12px}
-.auth-err{color:var(--red);font-size:.84rem;min-height:1.2em;margin:4px 0 10px}
-.auth-link{display:block;margin:14px auto 0;color:var(--blue);font-size:.84rem;font-weight:600}
-
-/* ---------- toast ---------- */
-#toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--surface3);border:1px solid var(--line);padding:10px 18px;border-radius:99px;font-weight:600;font-size:.88rem;opacity:0;pointer-events:none;transition:.22s;z-index:200;box-shadow:var(--shadow)}
-#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
-
-/* ---------- responsive ---------- */
-@media (max-width:1100px){.kpis{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.week{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:820px){
-  body{grid-template-columns:1fr;padding-bottom:70px}
-  .side{position:fixed;inset:auto 0 0 0;top:auto;height:auto;z-index:50;flex-direction:row;padding:6px 6px calc(6px + env(safe-area-inset-bottom));border-right:0;border-top:1px solid var(--line)}
-  .brand,.side-foot{display:none}
-  .nav{flex-direction:row;width:100%;justify-content:space-around}
-  .nav button{flex-direction:column;gap:2px;font-size:.62rem;padding:6px 4px;flex:1;align-items:center;text-align:center}
-  .nav button.on{box-shadow:none;background:var(--surface2);color:var(--pink)}
-  .nav .badge{position:absolute;top:1px;right:calc(50% - 20px);margin:0;font-size:.6rem;padding:0 5px;min-width:16px}
-  main{padding:0 14px 40px}
-  .top{padding:12px 0;flex-wrap:wrap;gap:10px}
-  .top h1{font-size:1.2rem}
-  .search{order:3;width:100%}
-  .kpis{grid-template-columns:1fr 1fr}
-  .kpi .val{font-size:1.5rem}
-  .f{grid-template-columns:1fr}
-  .week{grid-template-columns:1fr}
-  .day{min-height:0}
-  .hide-m{display:none}
-  .row{flex-wrap:wrap}
-  .row .grow{flex-basis:calc(100% - 30px)}
-  .row>div[style*=flex-shrink]{padding-left:21px}
-  .panel{padding:14px}
-  .sheet{padding:18px}
-}
-</style>
-</head>
-<body>
-
-<aside class="side">
-  <div class="brand"><img src="../assets/logo.png" alt="LED logo" onerror="this.style.display='none'" /><div><b>LED Detailing</b><small>CRM</small></div></div>
-  <nav class="nav" id="nav"></nav>
-  <div class="side-foot"><div id="bkStatus"></div><button data-act="backup">Download backup</button><button data-act="signout" id="soBtn" hidden>Sign out</button></div>
-</aside>
-
-<main>
-  <div class="top">
-    <h1 id="title">Dashboard</h1>
-    <label class="search"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="q" type="search" placeholder="Search name, phone, vehicle…" autocomplete="off" /></label>
-    <button class="btn btn-pink" data-act="newJob">+ New Lead</button>
-  </div>
-  <div id="view"></div>
-</main>
-
-<div id="auth" hidden>
-  <form class="auth-box" id="authForm" autocomplete="on">
-    <img src="../assets/logo.png" alt="LED logo" onerror="this.style.display='none'" />
-    <h2>LED Detailing CRM</h2>
-    <p class="sub">Sign in to continue</p>
-    <div class="fld"><label for="authEmail">Email</label><input id="authEmail" type="email" required autocomplete="username" /></div>
-    <div class="fld"><label for="authPw">Password</label><input id="authPw" type="password" required autocomplete="current-password" /></div>
-    <div class="auth-err" id="authErr" role="alert"></div>
-    <button class="btn btn-pink" type="submit" style="width:100%">Sign in</button>
-    <button class="auth-link" type="button" id="authReset">Forgot password?</button>
-  </form>
-</div>
-<div id="modal"></div>
-<div id="modal2"></div>
-<div id="toast"></div>
-
-<script src="firebase-config.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script>
-(function () {
-  "use strict";
-
-  /* =============================== helpers =============================== */
-  var KEY = "led_crm_v1";
-  var $ = function (s, r) { return (r || document).querySelector(s); };
-  var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
-  var uid = function () { return Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-4); };
-  var money = function (n) { n = Number(n) || 0; return "$" + n.toLocaleString("en-US", { maximumFractionDigits: 0 }); };
-  var digits = function (p) { return String(p || "").replace(/\D/g, "").replace(/^1(?=\d{10}$)/, ""); };
-  var fmtPhone = function (p) { var d = digits(p); return d.length === 10 ? "(" + d.slice(0, 3) + ") " + d.slice(3, 6) + "-" + d.slice(6) : (p || ""); };
-  var pd = function (s) { var a = s.split("-").map(Number); return new Date(a[0], a[1] - 1, a[2]); };
-  var fd = function (d) { return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); };
-  var today = function () { return fd(new Date()); };
-  var addDays = function (s, n) { var d = pd(s); d.setDate(d.getDate() + n); return fd(d); };
-  var daysBetween = function (a, b) { return Math.round((pd(b) - pd(a)) / 864e5); };
-  var weekStartOf = function (s) { var d = pd(s); d.setDate(d.getDate() - ((d.getDay() + 6) % 7)); return fd(d); };
-  var nice = function (s) { return s ? pd(s).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }) : ""; };
-  var niceLong = function (s) { return s ? pd(s).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }) : ""; };
-  var ftime = function (t) { if (!t) return ""; var a = t.split(":").map(Number), h = a[0], m = a[1]; return (h % 12 || 12) + ":" + String(m).padStart(2, "0") + " " + (h >= 12 ? "PM" : "AM"); };
-  var ageDays = function (iso) { return iso ? Math.floor((Date.now() - new Date(iso).getTime()) / 864e5) : 0; };
-  var nowISO = function () { return new Date().toISOString(); };
-  var sum = function (arr, f) { return arr.reduce(function (t, x) { return t + (Number(f(x)) || 0); }, 0); };
-
-  var ICON = {
-    dash: '<rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/>',
-    pipe: '<rect x="3" y="3" width="5" height="18" rx="1"/><rect x="10" y="3" width="5" height="12" rx="1"/><rect x="17" y="3" width="4" height="15" rx="1"/>',
-    cal: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
-    users: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
-    bell: '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/>',
-    set: '<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>'
-  };
-  var icon = function (k) { return '<svg class="i" viewBox="0 0 24 24">' + ICON[k] + "</svg>"; };
-
-  /* ================================ data ================================= */
-  var DEFAULT_TPL = {
-    quote: "Hi {first}, this is {business}! For your {vehicle}, the {package} is {price}. We come to you anywhere in Cincinnati & Northern Kentucky. Want me to get you on the schedule?",
-    confirm: "Hi {first}, you're booked with {business} for {date} at {time}: {package} on your {vehicle}. Location: {location}. Reply here if anything changes!",
-    reminder: "Hi {first}, just a reminder that your detail is {date} at {time}. See you then! If you need to reschedule, just text me.",
-    omw: "Hi {first}, we're on our way to you now. See you shortly!",
-    review: "Hi {first}, thanks for choosing {business}! If you're happy with how your {vehicle} turned out, a quick Google review helps us a ton: {reviewLink}",
-    rebook: "Hi {first}, it's been a little while since we detailed your {vehicle}. Want to get a refresh on the schedule? Reply with a day that works and I'll lock it in."
-  };
-  var TPL_LABEL = { quote: "Send quote", confirm: "Confirm booking", reminder: "Reminder", omw: "On my way", review: "Ask for review", rebook: "Rebook nudge" };
-  var STAGES = [
-    { id: "new", label: "New Lead", dot: "pink" },
-    { id: "quoted", label: "Quoted", dot: "amber" },
-    { id: "booked", label: "Booked", dot: "" },
-    { id: "completed", label: "Completed", dot: "green" },
-    { id: "lost", label: "Lost", dot: "red" }
-  ];
-  var SOURCES = ["Website form", "Call / text", "Instagram", "Referral", "Repeat customer", "Other"];
-  var SIZES = ["Car / sedan / coupe", "Small SUV / crossover", "Large SUV / minivan / 3-row", "Truck", "Other"];
-  var PAY = ["Cash", "Venmo", "Zelle", "Cash App", "Card", "Check"];
-
-  function defaults() {
-    return {
-      v: 1,
-      settings: {
-        business: "LED Detailing", reviewLink: "", rebookDays: 60, lastBackup: null,
-        packages: [
-          { name: "Basic Interior", price: 65 }, { name: "Platinum Interior", price: 100 },
-          { name: "Basic Exterior", price: 65 }, { name: "Platinum Exterior", price: 100 },
-          { name: "Full Detail: sedan/SUV", price: 140 }, { name: "Full Detail: truck", price: 200 }
-        ],
-        addons: [
-          { name: "Pet hair removal", price: 0 }, { name: "Seat extraction", price: 0 },
-          { name: "Trim restoration", price: 0 }, { name: "Wax protection", price: 0 }, { name: "Ceramic coating", price: 0 }
-        ],
-        templates: JSON.parse(JSON.stringify(DEFAULT_TPL))
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mobile Car Detailing in Cincinnati &amp; NKY | LED Detailing</title>
+  <meta name="description" content="LED Detailing (Luxury Elite Detailing): mobile interior detailing, pet hair removal, extraction, leather and trim restoration across Cincinnati, OH and Northern Kentucky." />
+  <link rel="canonical" href="https://luxuryelitedetailing.netlify.app/" />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Mobile Car Detailing in Cincinnati &amp; NKY | LED Detailing" />
+  <meta property="og:description" content="LED Detailing (Luxury Elite Detailing): mobile interior detailing, pet hair removal, extraction, leather and trim restoration across Cincinnati, OH and Northern Kentucky." />
+  <meta property="og:url" content="https://luxuryelitedetailing.netlify.app/" />
+  <meta property="og:image" content="https://luxuryelitedetailing.netlify.app/assets/hero.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/style.css?v=2" />
+  <link rel="stylesheet" href="assets/detailing.css?v=2" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AutoWash",
+  "name": "LED Detailing",
+  "alternateName": "Luxury Elite Detailing",
+  "image": "https://luxuryelitedetailing.netlify.app/assets/hero.jpg",
+  "url": "https://luxuryelitedetailing.netlify.app/",
+  "telephone": "+15136159437",
+  "email": "LuxuryEliteDetailing25@gmail.com",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Cincinnati",
+    "addressRegion": "OH",
+    "addressCountry": "US"
+  },
+  "areaServed": [
+    "Cincinnati, OH",
+    "Northern Kentucky"
+  ],
+  "sameAs": [
+    "https://www.instagram.com/luxuryelitedetailing/"
+  ],
+  "priceRange": "$65-$200",
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Detailing packages",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Basic Interior Detail"
+        },
+        "price": "65",
+        "priceCurrency": "USD"
       },
-      customers: [], jobs: []
-    };
-  }
-  var db, memOnly = false;
-  function load() {
-    var base = defaults();
-    try {
-      var raw = localStorage.getItem(KEY);
-      if (raw) {
-        var d = JSON.parse(raw);
-        base.customers = d.customers || []; base.jobs = d.jobs || [];
-        var s = d.settings || {};
-        Object.keys(s).forEach(function (k) { if (k !== "templates") base.settings[k] = s[k]; });
-        Object.keys(s.templates || {}).forEach(function (k) { base.settings.templates[k] = s.templates[k]; });
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Platinum Interior Detail"
+        },
+        "price": "100",
+        "priceCurrency": "USD"
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Basic Exterior Detail"
+        },
+        "price": "65",
+        "priceCurrency": "USD"
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Platinum Exterior Detail"
+        },
+        "price": "100",
+        "priceCurrency": "USD"
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Full Detail (sedans & SUVs)"
+        },
+        "price": "140",
+        "priceCurrency": "USD"
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Full Detail (trucks)"
+        },
+        "price": "200",
+        "priceCurrency": "USD"
       }
-    } catch (e) { memOnly = true; }
-    return base;
-  }
-  function save() {
-    if (cloud.on) { pushDiff(); return; }
-    try { localStorage.setItem(KEY, JSON.stringify(db)); } catch (e) { memOnly = true; }
-  }
-  db = load();
-  var cfg = window.LED_FIREBASE || {};
-  var cloud = { on: !!(cfg.apiKey && cfg.projectId && window.firebase), user: null, ready: false, fs: null, unsubs: [], shadow: { customers: {}, jobs: {}, settings: "" } };
-  var localCache = db;            // data saved on this device (offered for upload on first sign-in)
-  if (cloud.on) db = defaults();
+    ]
+  },
+  "slogan": "Being Trustworthy Will Take You A Long Way In Life"
+}
+  </script>
+</head>
+<body class="theme-gloss">
 
-  var state = { view: "dashboard", q: "", weekStart: weekStartOf(today()) };
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <img src="assets/logo.png" alt="LED Detailing logo" />
+        <span class="brand-name">LED Detailing<span>Luxury Elite Detailing</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="index.html" class="active">Home</a>
+        <a href="services.html">Services &amp; Pricing</a>
+        <a href="our-work.html">Our Work</a>
+        <a href="index.html#areas">Service Area</a>
+        <a href="index.html#quote">Contact</a>
+      </nav>
+      <div class="nav-cta">
+        <a class="nav-phone" href="tel:5136159437">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          (513) 615-9437
+        </a>
+        <a class="btn btn-gold nav-quote-btn" href="#quote">Request a Booking</a>
+        <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
 
-  /* ---- lookups ---- */
-  var cust = function (id) { return db.customers.filter(function (c) { return c.id === id; })[0] || { name: "(unknown)", phone: "" }; };
-  var job = function (id) { return db.jobs.filter(function (j) { return j.id === id; })[0]; };
-  var jobTotal = function (j) { return (Number(j.price) || 0) + (Number(j.tip) || 0); };
-  var pkgPrice = function (name) { var p = db.settings.packages.filter(function (x) { return x.name === name; })[0]; return p ? Number(p.price) || 0 : 0; };
-  var addonPrice = function (name) { var p = db.settings.addons.filter(function (x) { return x.name === name; })[0]; return p ? Number(p.price) || 0 : 0; };
-  var stageLabel = function (id) { return STAGES.filter(function (s) { return s.id === id; })[0].label; };
+  <section class="hero">
+    <div class="container hero-inner">
+      <span class="eyebrow" style="color:var(--gold)">Mobile Detailing · Cincinnati &amp; NKY</span>
+      <h1>Deep interior detailing that comes to you</h1>
+      <p>Pet hair, stains, spills and faded trim, handled in your driveway. Or bring it to our location.</p>
+      <div class="hero-actions">
+        <a class="btn btn-gold btn-lg" href="#quote">Request a Booking</a>
+        <a class="btn btn-light btn-lg" href="tel:5136159437">Call (513) 615-9437</a>
+      </div>
+      <div class="hero-badges">
+        <div class="hero-badge"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> We come to you</div>
+        <div class="hero-badge"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Pet hair removal</div>
+        <div class="hero-badge"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Leather &amp; trim restoration</div>
+      </div>
+    </div>
+  </section>
 
-  function custStats(c) {
-    var js = db.jobs.filter(function (j) { return j.customerId === c.id; });
-    var done = js.filter(function (j) { return j.stage === "completed"; });
-    var open = js.filter(function (j) { return ["new", "quoted", "booked"].indexOf(j.stage) > -1; });
-    var last = done.map(function (j) { return j.date; }).filter(Boolean).sort().pop() || "";
-    var life = sum(done.filter(function (j) { return j.paid; }), jobTotal);
-    var status = "Lead", cls = "";
-    if (open.length) { status = "Active"; cls = "blue"; }
-    else if (done.length) {
-      if (last && daysBetween(last, today()) >= db.settings.rebookDays) { status = "Rebook due"; cls = "pink"; }
-      else { status = "Customer"; cls = "green"; }
-    }
-    return { jobs: js, done: done, open: open, last: last, life: life, status: status, cls: cls };
-  }
+  <section class="trustbar">
+    <div class="container">
+      <div class="stat"><div class="num">Mobile</div><div class="label">We come to you</div></div>
+      <div class="stat"><div class="num">Cincy + NKY</div><div class="label">Service area</div></div>
+      <div class="stat"><div class="num">Interior</div><div class="label">Deep-clean specialists</div></div>
+      <div class="stat"><div class="num">Pet Hair</div><div class="label">Removal</div></div>
+    </div>
+  </section>
 
-  function matches(j) {
-    var q = state.q.trim().toLowerCase(); if (!q) return true;
-    var c = cust(j.customerId);
-    var hay = [c.name, c.phone, digits(c.phone), j.vehicle, j.package, j.location, j.notes, j.source].join(" ").toLowerCase();
-    return hay.indexOf(q) > -1 || (digits(q).length > 2 && digits(c.phone).indexOf(digits(q)) > -1);
-  }
+  <section class="section">
+    <div class="container split">
+      <div class="split-content reveal">
+        <span class="eyebrow">Real Results</span>
+        <h2>Drag the slider. That's the same cargo area.</h2>
+        <p class="lead">Pet hair woven into carpet is one of the hardest things to get out of a car. This is what our pet hair removal and interior detail look like on a real customer's SUV.</p>
+        <ul class="feature-list">
+          <li><span class="tick">✓</span> Pet hair pulled out of carpet and seat fabric</li>
+          <li><span class="tick">✓</span> Extraction for stains, spills and odors</li>
+          <li><span class="tick">✓</span> Interior leather cleaned and shined</li>
+        </ul>
+        <a class="btn btn-primary" href="our-work.html" style="margin-top:30px">See More Transformations</a>
+      </div>
+      <div class="split-media reveal">
+        <div class="ba-slider" style="aspect-ratio:4/5">
+          <img src="assets/after-01.jpg?v=2" alt="Same cargo area after pet hair removal and vacuum" loading="lazy" />
+          <img class="ba-before" src="assets/before-01.jpg?v=2" alt="SUV cargo area covered in pet hair" loading="lazy" />
+          <span class="ba-tag">Before</span><span class="ba-tag after">After</span>
+          <span class="ba-line"></span><span class="ba-knob" aria-hidden="true">‹ ›</span>
+          <input type="range" min="0" max="100" value="50" aria-label="Drag to compare before and after" />
+        </div>
+        <p class="ba-slider-cap">SUV cargo area: pet hair removed</p>
+      </div>
+    </div>
+  </section>
 
-  /* ============================== follow-ups ============================= */
-  function followups() {
-    var t = today(), tm = addDays(t, 1), out = [];
-    db.jobs.forEach(function (j) {
-      var c = cust(j.customerId), nm = c.name;
-      if (j.stage === "new") out.push({ pri: 1, color: "pink", title: "Reply to " + nm, sub: [j.vehicle, j.package || "Package not chosen"].filter(Boolean).join(" · ") + " · " + (ageDays(j.created) ? ageDays(j.created) + "d ago" : "today"), job: j.id, tpl: "quote", label: "Text quote" });
-      if (j.stage === "quoted" && ageDays(j.updated) >= 2) out.push({ pri: 3, color: "amber", title: "Follow up on quote: " + nm, sub: money(j.price) + " · quoted " + ageDays(j.updated) + " days ago", job: j.id, tpl: "quote", label: "Text follow-up" });
-      if (j.stage === "booked" && (j.date === t || j.date === tm)) out.push({ pri: 2, color: "", title: (j.date === t ? "Today" : "Tomorrow") + (j.time ? " " + ftime(j.time) : "") + ": " + nm, sub: [j.vehicle, j.package, j.location].filter(Boolean).join(" · "), job: j.id, tpl: "reminder", label: "Text reminder" });
-      if (j.stage === "completed" && !j.paid) out.push({ pri: 2, color: "red", title: "Collect payment: " + nm, sub: money(j.price) + " owed · " + nice(j.date), job: j.id, act: "markPaid", label: "Mark paid" });
-      if (j.stage === "completed" && !j.reviewAsked && j.date && daysBetween(j.date, t) <= 14 && daysBetween(j.date, t) >= 0) out.push({ pri: 4, color: "green", title: "Ask " + nm + " for a review", sub: j.vehicle + " · detailed " + nice(j.date), job: j.id, tpl: "review", label: "Text review ask" });
-    });
-    db.customers.forEach(function (c) {
-      var s = custStats(c);
-      if (s.status === "Rebook due" && !(c.snoozeUntil && c.snoozeUntil > t)) {
-        out.push({ pri: 5, color: "pink", title: "Rebook nudge: " + c.name, sub: "Last detail " + nice(s.last) + " (" + daysBetween(s.last, t) + " days ago) · " + money(s.life) + " lifetime", cust: c.id, tpl: "rebook", label: "Text nudge", snooze: true });
-      }
-    });
-    out.sort(function (a, b) { return a.pri - b.pri; });
-    return out;
-  }
+  <section class="section" id="packages" style="background:var(--sand)">
+    <div class="container">
+      <div class="center reveal">
+        <span class="eyebrow">Packages &amp; Pricing</span>
+        <h2>Simple prices. No surprises.</h2>
+        <p class="lead">Pick a package, tap book, and we'll confirm a time. Mobile service across Cincinnati and Northern Kentucky.</p>
+      </div>
+      <div class="pkg-grid pk-grid">
+        <article class="pkg-card pk reveal">
+          <span class="pkg-tier">Interior</span>
+          <h3>Interior Detail</h3>
+          <p class="pkg-for">Crumbs, dust and smells gone. Pick your level.</p>
+          <div class="pk-toggle" role="group" aria-label="Interior Detail options">
+            <button type="button" class="on" data-opt="basic" aria-pressed="true">Basic</button>
+            <button type="button" class="" data-opt="platinum" aria-pressed="false">Platinum</button>
+          </div>
+          <div class="pk-opt" data-opt="basic" data-book="Basic Interior ($65)">
+            <div class="pk-price">$65</div>
+            <ul class="pkg-includes">
+              <li>Full vacuum</li>
+              <li>Deep wipe down</li>
+              <li>Odor refresh</li>
+            </ul>
+          </div>
+          <div class="pk-opt" data-opt="platinum" data-book="Platinum Interior ($100)" hidden>
+            <div class="pk-price">$100</div>
+            <ul class="pkg-includes">
+              <li>Deep vacuum &amp; full wipe down</li>
+              <li>Interior glass cleaned</li>
+              <li>Interior shine applied</li>
+              <li>Odor elimination</li>
+            </ul>
+          </div>
+          <a class="btn btn-ghost pk-book" href="#quote">Book Basic Interior · $65</a>
+        </article>
+        <article class="pkg-card pk featured reveal">
+          <span class="pkg-ribbon">Best Value</span>
+          <span class="pkg-tier">Inside + Out</span>
+          <h3>Full Detail</h3>
+          <p class="pkg-for">Inside and out with a platinum-level finish. The one most cars need.</p>
+          <div class="pk-toggle" role="group" aria-label="Full Detail options">
+            <button type="button" class="on" data-opt="car" aria-pressed="true">Sedan / SUV</button>
+            <button type="button" class="" data-opt="truck" aria-pressed="false">Truck</button>
+          </div>
+          <div class="pk-opt" data-opt="car" data-book="Full Detail: sedan/SUV ($140)">
+            <div class="pk-price">$140</div>
+            <p class="pk-save">Save $60 vs. platinum interior + exterior</p>
+            <ul class="pkg-includes">
+              <li>Full interior service</li>
+              <li>Full exterior service</li>
+              <li>Platinum-level finish inside and out</li>
+            </ul>
+          </div>
+          <div class="pk-opt" data-opt="truck" data-book="Full Detail: truck ($200)" hidden>
+            <div class="pk-price">$200</div>
+            <ul class="pkg-includes">
+              <li>Full interior service</li>
+              <li>Full exterior service</li>
+              <li>Platinum-level finish inside and out</li>
+            </ul>
+          </div>
+          <a class="btn btn-gold pk-book" href="#quote">Book Full Detail · $140</a>
+        </article>
+        <article class="pkg-card pk reveal">
+          <span class="pkg-tier">Exterior</span>
+          <h3>Exterior Detail</h3>
+          <p class="pkg-for">Foam wash and shine, or a two-pass deep clean.</p>
+          <div class="pk-toggle" role="group" aria-label="Exterior Detail options">
+            <button type="button" class="on" data-opt="basic" aria-pressed="true">Basic</button>
+            <button type="button" class="" data-opt="platinum" aria-pressed="false">Platinum</button>
+          </div>
+          <div class="pk-opt" data-opt="basic" data-book="Basic Exterior ($65)">
+            <div class="pk-price">$65</div>
+            <ul class="pkg-includes">
+              <li>Foam wash</li>
+              <li>Tire shine</li>
+            </ul>
+          </div>
+          <div class="pk-opt" data-opt="platinum" data-book="Platinum Exterior ($100)" hidden>
+            <div class="pk-price">$100</div>
+            <ul class="pkg-includes">
+              <li>Foam wash (2x for deep clean)</li>
+              <li>Full wipe down (2x)</li>
+              <li>Tire shine</li>
+              <li>Exterior glass cleaned</li>
+              <li>Door jambs cleaned</li>
+            </ul>
+          </div>
+          <a class="btn btn-ghost pk-book" href="#quote">Book Basic Exterior · $65</a>
+        </article>
+      </div>
+      <ul class="pk-trust reveal">
+        <li>✓ Mobile: we come to you</li><li>✓ Or bring it to our location</li><li>✓ Add pet hair removal or seat extraction to any package</li>
+      </ul>
+      <div class="center" style="margin-top:34px"><a class="btn btn-ghost btn-lg" href="services.html">See All Services</a></div>
+    </div>
+  </section>
 
-  /* ================================ views ================================ */
-  function jobCardMini(j) {
-    var c = cust(j.customerId);
-    return '<div class="row click" data-act="editJob" data-id="' + j.id + '"><span class="dot ' + (j.stage === "completed" ? "green" : "") + '"></span><div class="grow"><div class="t">' + esc(c.name) + '</div><div class="s">' + esc([j.vehicle, j.package].filter(Boolean).join(" · ")) + '</div></div><div style="text-align:right"><div class="t">' + esc(nice(j.date)) + '</div><div class="s">' + esc(ftime(j.time) || money(j.price)) + "</div></div></div>";
-  }
+  <section class="section">
+    <div class="container">
+      <div class="center reveal">
+        <span class="eyebrow">How It Works</span>
+        <h2>Clean car, zero hassle</h2>
+      </div>
+      <div class="steps">
+        <div class="step reveal"><h3>Send your details</h3><p>Fill out the form, call, text or DM us with your vehicle and what it needs.</p></div>
+        <div class="step reveal"><h3>We come to you</h3><p>We detail at your home or work, or you can bring the car to our location.</p></div>
+        <div class="step reveal"><h3>Drive away clean</h3><p>Enjoy a car that looks and smells clean again.</p></div>
+      </div>
+    </div>
+  </section>
 
-  function fuRow(f) {
-    var btns = "";
-    if (f.tpl) btns += '<button class="btn btn-ghost btn-sm" data-act="msg" ' + (f.job ? 'data-job="' + f.job + '"' : 'data-cust="' + f.cust + '"') + ' data-tpl="' + f.tpl + '">' + f.label + "</button>";
-    if (f.act === "markPaid") btns += '<button class="btn btn-ghost btn-sm" data-act="markPaid" data-id="' + f.job + '">' + f.label + "</button>";
-    if (f.snooze) btns += '<button class="btn btn-ghost btn-sm" data-act="snooze" data-id="' + f.cust + '" title="Hide for 30 days">Snooze</button>';
-    var open = f.job ? 'data-act="editJob" data-id="' + f.job + '"' : 'data-act="openCust" data-id="' + f.cust + '"';
-    return '<div class="row"><span class="dot ' + f.color + '"></span><div class="grow click" style="cursor:pointer" ' + open + '><div class="t">' + esc(f.title) + '</div><div class="s">' + esc(f.sub) + '</div></div><div style="display:flex;gap:6px;flex-shrink:0">' + btns + "</div></div>";
-  }
+  <section class="section" style="background:var(--sand)">
+    <div class="container">
+      <div class="center reveal">
+        <span class="eyebrow">Recent Work</span>
+        <h2>From daily drivers to AMGs</h2>
+        <p class="lead">A few recent jobs from around Cincinnati and Northern Kentucky.</p>
+      </div>
+      <div class="gallery" style="margin-top:40px">
+        <div class="gallery-item reveal" data-lightbox="assets/gallery-01.jpg?v=2"><img src="assets/gallery-01.jpg?v=2" alt="BMW X4 driver side with red leather seat after interior detail" loading="lazy" /></div>
+        <div class="gallery-item reveal" data-lightbox="assets/gallery-02.jpg?v=2"><img src="assets/gallery-02.jpg?v=2" alt="Dodge Durango SRT exterior after hand wash" loading="lazy" /></div>
+        <div class="gallery-item reveal" data-lightbox="assets/gallery-03.jpg?v=2"><img src="assets/gallery-03.jpg?v=2" alt="GMC Yukon Denali after exterior detail" loading="lazy" /></div>
+      </div>
+      <div class="center" style="margin-top:40px; display:flex; flex-wrap:wrap; gap:12px; justify-content:center">
+        <a class="btn btn-ghost btn-lg" href="our-work.html">View Full Gallery</a>
+        <a class="btn btn-ghost btn-lg" href="https://www.instagram.com/luxuryelitedetailing/" target="_blank" rel="noopener" aria-label="More of our work on Instagram"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c2.7 0 3.06.01 4.12.06 1.07.05 1.8.22 2.43.47.66.25 1.22.6 1.77 1.15.55.55.9 1.11 1.15 1.77.25.64.42 1.36.47 2.43.05 1.07.06 1.41.06 4.13s-.01 3.06-.06 4.12c-.05 1.07-.22 1.8-.47 2.43-.25.66-.6 1.22-1.15 1.77-.55.55-1.11.9-1.77 1.15-.64.25-1.36.42-2.43.47-1.07.05-1.41.06-4.12.06s-3.06-.01-4.12-.06c-1.07-.05-1.8-.22-2.43-.47a4.9 4.9 0 0 1-1.77-1.15 4.9 4.9 0 0 1-1.15-1.77c-.25-.64-.42-1.36-.47-2.43C2.01 15.06 2 14.72 2 12s.01-3.06.06-4.12c.05-1.07.22-1.8.47-2.43.25-.66.6-1.22 1.15-1.77a4.9 4.9 0 0 1 1.77-1.15c.64-.25 1.36-.42 2.43-.47C8.94 2.01 9.28 2 12 2Zm0 1.8c-2.67 0-2.99.01-4.04.06-.98.04-1.5.21-1.86.34-.47.18-.8.4-1.15.75-.35.35-.57.68-.75 1.15-.13.36-.3.88-.34 1.86-.05 1.05-.06 1.37-.06 4.04s.01 2.99.06 4.04c.04.98.21 1.5.34 1.86.18.47.4.8.75 1.15.35.35.68.57 1.15.75.36.13.88.3 1.86.34 1.05.05 1.37.06 4.04.06s2.99-.01 4.04-.06c.98-.04 1.5-.21 1.86-.34.47-.18.8-.4 1.15-.75.35-.35.57-.68.75-1.15.13-.36.3-.88.34-1.86.05-1.05.06-1.37.06-4.04s-.01-2.99-.06-4.04c-.04-.98-.21-1.5-.34-1.86a3.1 3.1 0 0 0-.75-1.15 3.1 3.1 0 0 0-1.15-.75c-.36-.13-.88-.3-1.86-.34-1.05-.05-1.37-.06-4.04-.06Zm0 3.06a5.14 5.14 0 1 1 0 10.28 5.14 5.14 0 0 1 0-10.28Zm0 1.8a3.34 3.34 0 1 0 0 6.68 3.34 3.34 0 0 0 0-6.68Zm5.34-.46a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4Z"/></svg> More on Instagram</a>
+      </div>
+    </div>
+  </section>
 
-  var VIEWS = {};
+  <section class="section" id="about" style="background:var(--green-900)">
+    <div class="container split">
+      <div class="split-content reveal">
+        <span class="eyebrow" style="color:var(--gold)">Why LED Detailing</span>
+        <h2 style="color:#fff">Being trustworthy will take you a long way</h2>
+        <p style="color:rgba(255,255,255,0.82); margin-top:16px">That's our motto, and it's how we run every job. You're handing over your keys, so you get honest quotes, careful hands and a car that's clean in the places people usually skip.</p>
+        <ul class="feature-list">
+          <li style="color:#fff"><span class="tick" style="background:var(--gold);color:var(--green-900)">✓</span> Mobile service, or drop it off at our location</li>
+          <li style="color:#fff"><span class="tick" style="background:var(--gold);color:var(--green-900)">✓</span> Pet hair, stains and heavy interiors welcome</li>
+          <li style="color:#fff"><span class="tick" style="background:var(--gold);color:var(--green-900)">✓</span> Leather and trim brought back to life</li>
+        </ul>
+      </div>
+      <div class="split-media reveal">
+        <img src="assets/team.jpg" alt="LED Detailing hand washing a black Mercedes-AMG convertible" loading="lazy" />
+      </div>
+    </div>
+  </section>
 
-  VIEWS.dashboard = function () {
-    var t = today(), mo = t.slice(0, 7);
-    if (!db.jobs.length && !db.customers.length) {
-      return '<div class="panel" style="text-align:center;padding:48px 20px"><h2 style="justify-content:center;font-size:1.3rem;margin-bottom:8px">Welcome to your CRM</h2><p class="muted" style="max-width:48ch;margin:0 auto 22px">Track every lead from the first text to the final payment. Add your first lead"+(cloud.on?" or wait for one to arrive from your website form.":", import your website form submissions, or load sample data to look around.")+"</p><div class="actions" style="justify-content:center"><button class="btn btn-pink" data-act="newJob">+ Add first lead</button>' + (cloud.on ? '' : '<button class="btn btn-ghost" data-act="sample">Load sample data</button>') + '<button class="btn btn-ghost" data-act="goto" data-view="settings">Import form submissions</button></div></div>';
-    }
-    var newN = db.jobs.filter(function (j) { return j.stage === "new"; }).length;
-    var wk = weekStartOf(t), wkEnd = addDays(wk, 6);
-    var bookedWk = db.jobs.filter(function (j) { return j.stage === "booked" && j.date >= wk && j.date <= wkEnd; });
-    var revMo = sum(db.jobs.filter(function (j) { return j.paid && j.date && j.date.slice(0, 7) === mo; }), jobTotal);
-    var owed = db.jobs.filter(function (j) { return j.stage === "completed" && !j.paid; });
-    var fu = followups();
-    var upcoming = db.jobs.filter(function (j) { return j.stage === "booked" && j.date && j.date >= t; }).sort(function (a, b) { return (a.date + (a.time || "")) < (b.date + (b.time || "")) ? -1 : 1; }).slice(0, 5);
-    // 6-month revenue
-    var months = [], d = new Date(); d.setDate(1);
-    for (var i = 5; i >= 0; i--) { var m = new Date(d.getFullYear(), d.getMonth() - i, 1); months.push({ k: m.getFullYear() + "-" + String(m.getMonth() + 1).padStart(2, "0"), l: m.toLocaleDateString("en-US", { month: "short" }), v: 0 }); }
-    db.jobs.forEach(function (j) { if (j.paid && j.date) months.forEach(function (m) { if (m.k === j.date.slice(0, 7)) m.v += jobTotal(j); }); });
-    var mx = Math.max.apply(null, months.map(function (m) { return m.v; }).concat([1]));
-    var won = db.jobs.filter(function (j) { return j.stage === "booked" || j.stage === "completed"; }).length, lost = db.jobs.filter(function (j) { return j.stage === "lost"; }).length;
-    var pipeVal = sum(db.jobs.filter(function (j) { return j.stage === "quoted" || j.stage === "booked"; }), function (j) { return j.price; });
+  <section class="section" id="areas">
+    <div class="container center">
+      <div class="reveal">
+        <span class="eyebrow">Service Area</span>
+        <h2>Cincinnati and Northern Kentucky</h2>
+        <p class="lead">We bring the detail to your driveway or office anywhere in our service area. Not sure if you're covered? Call or text and ask.</p>
+        <div class="areas" style="justify-content:center">
+          <span class="chip">Cincinnati, <b>OH</b></span>
+          <span class="chip">Northern Kentucky</span>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    return '<div class="grid kpis">' +
-      '<div class="panel kpi a"><div class="lab">New leads</div><div class="val">' + newN + '</div><div class="note">waiting for a reply</div></div>' +
-      '<div class="panel kpi b"><div class="lab">Booked this week</div><div class="val">' + bookedWk.length + '</div><div class="note">' + money(sum(bookedWk, function (j) { return j.price; })) + " scheduled</div></div>" +
-      '<div class="panel kpi c"><div class="lab">Revenue this month</div><div class="val">' + money(revMo) + '</div><div class="note">paid jobs only</div></div>' +
-      '<div class="panel kpi d"><div class="lab">Unpaid</div><div class="val">' + money(sum(owed, function (j) { return j.price; })) + '</div><div class="note">' + owed.length + " completed job" + (owed.length === 1 ? "" : "s") + "</div></div></div>" +
-      '<div class="grid two" style="margin-top:16px">' +
-        '<div class="panel"><h2>Needs attention<span class="sub">' + fu.length + " item" + (fu.length === 1 ? "" : "s") + '</span></h2>' + (fu.length ? fu.slice(0, 6).map(fuRow).join("") + (fu.length > 6 ? '<div style="text-align:center;margin-top:10px"><button class="btn btn-ghost btn-sm" data-act="goto" data-view="followups">See all ' + fu.length + "</button></div>" : "") : '<div class="empty">All caught up. Nice work.</div>') + "</div>" +
-        '<div class="panel"><h2>Next up<span class="sub">booked jobs</span></h2>' + (upcoming.length ? upcoming.map(jobCardMini).join("") : '<div class="empty">Nothing on the schedule yet.</div>') + "</div>" +
-      "</div>" +
-      '<div class="grid two" style="margin-top:16px">' +
-        '<div class="panel"><h2>Revenue<span class="sub">last 6 months · paid</span></h2><div class="bars">' + months.map(function (m) { return '<div class="bc"><span class="bv">' + (m.v ? money(m.v) : "") + '</span><div class="bar" style="height:' + Math.max(2, Math.round(m.v / mx * 100)) + '%"></div>' + m.l + "</div>"; }).join("") + "</div></div>" +
-        '<div class="panel"><h2>Pipeline</h2>' + STAGES.map(function (s) { var js = db.jobs.filter(function (j) { return j.stage === s.id; }); return '<div class="row"><span class="dot ' + s.dot + '"></span><div class="grow t">' + s.label + '</div><span class="muted">' + js.length + '</span><span style="width:70px;text-align:right;font-weight:600">' + (s.id === "lost" ? "" : money(sum(js, function (j) { return j.price; }))) + "</span></div>"; }).join("") +
-        '<div class="row"><div class="grow muted">Open pipeline value</div><b>' + money(pipeVal) + '</b></div><div class="row"><div class="grow muted">Win rate</div><b>' + (won + lost ? Math.round(won / (won + lost) * 100) + "%" : "–") + "</b></div></div>" +
-      "</div>";
-  };
+  <section class="section" id="quote">
+    <div class="container">
+      <div class="quote-band reveal">
+        <div class="quote-grid">
+          <div class="quote-copy">
+            <span class="eyebrow" style="color:var(--gold)">Book Your Detail</span>
+            <h2>Tell us about your car</h2>
+            <p>Send the details and we'll get back to you to confirm your package and a time that works.</p>
+            <ul class="quote-perks">
+              <li><span class="tick">✓</span> Mobile: we come to you, or bring it to us</li>
+              <li><span class="tick">✓</span> Serving Cincinnati &amp; Northern Kentucky</li>
+              <li><span class="tick">✓</span> Pet hair, stains and heavy interiors welcome</li>
+            </ul>
+            <p style="margin-top:26px;color:#fff;font-weight:600">Prefer to talk? Call or text <a href="tel:5136159437" style="color:var(--gold)">(513) 615-9437</a></p>
+          </div>
+          <form class="quote-form" id="booking-form" action="/#quote" name="booking" method="POST" data-netlify="true" netlify-honeypot="company">
+            <input type="hidden" name="form-name" value="booking" />
+            <p hidden><label>Leave blank <input name="company" /></label></p>
+            <h3>Request a Booking</h3>
+            <p>We'll reach out to confirm your quote and time.</p>
+            <div class="field"><label for="name">Name</label><input id="name" name="name" type="text" required autocomplete="name" /></div>
+            <div class="field"><label for="phone">Mobile number</label><input id="phone" name="phone" type="tel" required autocomplete="tel" /></div>
+            <div class="field"><label for="email">Email <span style="font-weight:400;opacity:.7">(optional, for your confirmation)</span></label><input id="email" name="email" type="email" autocomplete="email" /></div>
+            <div class="field"><label for="vehicle">Year / make / model</label><input id="vehicle" name="vehicle" type="text" required placeholder="2021 Toyota RAV4" /></div>
+            <div class="field"><label for="size">Vehicle size</label>
+              <select id="size" name="size">
+                <option>Car / sedan / coupe</option><option>Small SUV / crossover</option><option>Large SUV / minivan / 3-row</option><option>Truck</option><option>Other</option>
+              </select>
+            </div>
+            <div class="field"><label for="service">Package</label>
+              <select id="service" name="service">
+                <option value="">Not sure, help me choose</option>
+                <option>Basic Interior ($65)</option><option>Platinum Interior ($100)</option><option>Basic Exterior ($65)</option><option>Platinum Exterior ($100)</option><option>Full Detail: sedan/SUV ($140)</option><option>Full Detail: truck ($200)</option>
+              </select>
+            </div>
+            <div class="field"><label for="date">Preferred date</label><input id="date" name="date" type="date" /></div>
+            <div class="field"><label for="where">Mobile service address, or "drop off"</label><input id="where" name="location" type="text" placeholder="Where should we come to?" /></div>
+            <div class="field"><label for="msg">Anything we should know?</label><textarea id="msg" name="message" placeholder="Pet hair, stains, odors, trim, etc."></textarea></div>
+            <button class="btn btn-primary btn-lg" type="submit" style="width:100%;justify-content:center">Send Request</button>
+            <p class="form-note">No spam. We only use this to schedule your detail.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  function cardHTML(j) {
-    var c = cust(j.customerId);
-    var next = { new: "quoted", quoted: "booked", booked: "completed" }[j.stage];
-    var btns = "";
-    if (next) btns += '<button class="btn btn-ghost btn-sm" data-act="advance" data-id="' + j.id + '">→ ' + stageLabel(next) + "</button>";
-    if (j.stage === "completed" && !j.paid) btns += '<button class="btn btn-ghost btn-sm" data-act="markPaid" data-id="' + j.id + '">Mark paid</button>';
-    if (c.phone) btns += '<a class="btn btn-ghost btn-sm" href="tel:' + digits(c.phone) + '" data-stop="1">Call</a>';
-    return '<div class="card stage-' + j.stage + '" draggable="true" data-act="editJob" data-id="' + j.id + '">' +
-      '<div class="cn">' + esc(c.name) + '</div><div class="cv">' + esc(j.vehicle || "Vehicle not given") + "</div>" +
-      '<div class="cm">' + (j.package ? '<span class="tag blue">' + esc(j.package) + "</span>" : '<span class="tag">No package</span>') +
-      (j.date ? '<span class="tag">' + esc(nice(j.date) + (j.time ? " " + ftime(j.time) : "")) + "</span>" : "") +
-      (j.stage === "completed" ? (j.paid ? '<span class="tag green">Paid</span>' : '<span class="tag red">Unpaid</span>') : "") +
-      '<span class="price">' + (j.price ? money(j.price) : "") + "</span></div>" +
-      (btns ? '<div class="ca">' + btns + "</div>" : "") + "</div>";
-  }
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="assets/logo.png" alt="LED Detailing logo" />
+          <p>Mobile interior and exterior detailing across Cincinnati and Northern Kentucky. Being trustworthy will take you a long way in life.</p>
+          <div class="socials">
+            <a href="https://www.instagram.com/luxuryelitedetailing/" aria-label="Instagram" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c2.7 0 3.06.01 4.12.06 1.07.05 1.8.22 2.43.47.66.25 1.22.6 1.77 1.15.55.55.9 1.11 1.15 1.77.25.64.42 1.36.47 2.43.05 1.07.06 1.41.06 4.13s-.01 3.06-.06 4.12c-.05 1.07-.22 1.8-.47 2.43-.25.66-.6 1.22-1.15 1.77-.55.55-1.11.9-1.77 1.15-.64.25-1.36.42-2.43.47-1.07.05-1.41.06-4.12.06s-3.06-.01-4.12-.06c-1.07-.05-1.8-.22-2.43-.47a4.9 4.9 0 0 1-1.77-1.15 4.9 4.9 0 0 1-1.15-1.77c-.25-.64-.42-1.36-.47-2.43C2.01 15.06 2 14.72 2 12s.01-3.06.06-4.12c.05-1.07.22-1.8.47-2.43.25-.66.6-1.22 1.15-1.77a4.9 4.9 0 0 1 1.77-1.15c.64-.25 1.36-.42 2.43-.47C8.94 2.01 9.28 2 12 2Zm0 1.8c-2.67 0-2.99.01-4.04.06-.98.04-1.5.21-1.86.34-.47.18-.8.4-1.15.75-.35.35-.57.68-.75 1.15-.13.36-.3.88-.34 1.86-.05 1.05-.06 1.37-.06 4.04s.01 2.99.06 4.04c.04.98.21 1.5.34 1.86.18.47.4.8.75 1.15.35.35.68.57 1.15.75.36.13.88.3 1.86.34 1.05.05 1.37.06 4.04.06s2.99-.01 4.04-.06c.98-.04 1.5-.21 1.86-.34.47-.18.8-.4 1.15-.75.35-.35.57-.68.75-1.15.13-.36.3-.88.34-1.86.05-1.05.06-1.37.06-4.04s-.01-2.99-.06-4.04c-.04-.98-.21-1.5-.34-1.86a3.1 3.1 0 0 0-.75-1.15 3.1 3.1 0 0 0-1.15-.75c-.36-.13-.88-.3-1.86-.34-1.05-.05-1.37-.06-4.04-.06Zm0 3.06a5.14 5.14 0 1 1 0 10.28 5.14 5.14 0 0 1 0-10.28Zm0 1.8a3.34 3.34 0 1 0 0 6.68 3.34 3.34 0 0 0 0-6.68Zm5.34-.46a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4Z"/></svg></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Services &amp; Pricing</a></li>
+            <li><a href="our-work.html">Our Work</a></li>
+            <li><a href="index.html#areas">Service Area</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="services.html#interior">Interior Detailing</a></li>
+            <li><a href="services.html#pet-hair">Pet Hair Removal</a></li>
+            <li><a href="services.html#leather-trim">Leather &amp; Trim Restoration</a></li>
+            <li><a href="services.html#exterior">Exterior Hand Wash</a></li>
+          </ul>
+        </div>
+        <div class="footer-col footer-contact">
+          <h4>Get in Touch</h4>
+          <ul>
+            <li><a href="tel:5136159437">📞 (513) 615-9437</a></li>
+            <li><a href="mailto:LuxuryEliteDetailing25@gmail.com">✉️ Email us</a></li>
+            <li><a href="#quote">📅 Book a Detail</a></li>
+            <li>📍 Cincinnati, OH &amp; NKY</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span id="year">2026</span> LED Detailing (Luxury Elite Detailing). All Rights Reserved.</span>
+        <span>Serving Cincinnati, OH &amp; Northern Kentucky</span>
+      </div>
+    </div>
+  </footer>
 
-  VIEWS.pipeline = function () {
-    return '<div class="board">' + STAGES.map(function (s) {
-      var js = db.jobs.filter(function (j) { return j.stage === s.id && matches(j); }).sort(function (a, b) { return (b.updated || "") < (a.updated || "") ? -1 : 1; });
-      return '<div class="col" data-stage="' + s.id + '"><div class="col-h"><span class="dot ' + s.dot + '"></span>' + s.label + '<span class="n">' + js.length + '</span><span class="sum">' + (s.id === "lost" ? "" : money(sum(js, function (j) { return j.price; }))) + "</span></div>" + (js.length ? js.map(cardHTML).join("") : '<div class="empty" style="padding:18px 4px">Drop jobs here</div>') + "</div>";
-    }).join("") + "</div>";
-  };
+  <div class="lightbox"><button class="lightbox-close" aria-label="Close">&times;</button><img src="" alt="Enlarged photo of LED Detailing work" /></div>
 
-  VIEWS.schedule = function () {
-    var ws = state.weekStart, we = addDays(ws, 6), t = today(), cols = "";
-    for (var i = 0; i < 7; i++) {
-      var ds = addDays(ws, i);
-      var evs = db.jobs.filter(function (j) { return j.date === ds && (j.stage === "booked" || j.stage === "completed") && matches(j); }).sort(function (a, b) { return (a.time || "99") < (b.time || "99") ? -1 : 1; });
-      cols += '<div class="day ' + (ds === t ? "today" : "") + '"><div class="day-h">' + pd(ds).toLocaleDateString("en-US", { weekday: "short" }) + " <b>" + pd(ds).getDate() + '</b><button data-act="newJob" data-date="' + ds + '" title="Add a job">+</button></div>' +
-        (evs.length ? evs.map(function (j) { var c = cust(j.customerId); return '<div class="ev ' + j.stage + '" data-act="editJob" data-id="' + j.id + '">' + (j.time ? '<span class="tm">' + ftime(j.time) + "</span>" : "") + "<b>" + esc(c.name) + '</b><span class="ls">' + esc(j.package || j.vehicle || "") + '</span><span class="ls">' + esc(j.location || "") + "</span></div>"; }).join("") : '<div class="faint" style="font-size:.78rem">–</div>') + "</div>";
-    }
-    var undated = db.jobs.filter(function (j) { return j.stage === "booked" && !j.date && matches(j); });
-    var rangeLbl = pd(ws).toLocaleDateString("en-US", { month: "short", day: "numeric" }) + " – " + pd(we).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-    return '<div class="wk"><h2>' + rangeLbl + '</h2><button class="btn btn-ghost btn-sm" data-act="wk" data-n="-7">← Prev</button><button class="btn btn-ghost btn-sm" data-act="wk" data-n="0">This week</button><button class="btn btn-ghost btn-sm" data-act="wk" data-n="7">Next →</button></div>' +
-      '<div class="week">' + cols + "</div>" +
-      (undated.length ? '<div class="panel" style="margin-top:16px"><h2>Booked, no date yet<span class="sub">' + undated.length + "</span></h2>" + undated.map(jobCardMini).join("") + "</div>" : "");
-  };
+  <div class="mobile-cta-bar">
+    <a class="mob-call" href="tel:5136159437">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      Call Now
+    </a>
+    <a class="mob-quote" href="#quote">Request a Booking</a>
+  </div>
 
-  VIEWS.customers = function () {
-    var q = state.q.trim().toLowerCase();
-    var list = db.customers.map(function (c) { return { c: c, s: custStats(c) }; }).filter(function (x) {
-      if (!q) return true;
-      var hay = [x.c.name, x.c.phone, digits(x.c.phone), x.c.email, (x.c.vehicles || []).join(" "), x.c.address].join(" ").toLowerCase();
-      return hay.indexOf(q) > -1;
-    }).sort(function (a, b) { return (b.s.last || "") < (a.s.last || "") ? -1 : (b.s.last || "") > (a.s.last || "") ? 1 : a.c.name.localeCompare(b.c.name); });
-    if (!db.customers.length) return '<div class="panel"><div class="empty">No customers yet. They are created automatically when you add a lead.</div></div>';
-    return '<div class="panel" style="padding:6px 6px 0;overflow-x:auto"><table class="tbl"><thead><tr><th>Customer</th><th class="hide-m">Vehicles</th><th class="num">Jobs</th><th class="num">Lifetime</th><th class="hide-m">Last detail</th><th>Status</th></tr></thead><tbody>' +
-      list.map(function (x) { return '<tr class="click" data-act="openCust" data-id="' + x.c.id + '"><td><div class="nm">' + esc(x.c.name) + '</div><div class="sub">' + esc(fmtPhone(x.c.phone)) + '</div></td><td class="hide-m sub">' + esc((x.c.vehicles || []).join(", ")) + '</td><td class="num">' + x.s.jobs.length + '</td><td class="num">' + money(x.s.life) + '</td><td class="hide-m sub">' + (x.s.last ? esc(nice(x.s.last)) : "–") + '</td><td><span class="tag ' + x.s.cls + '">' + x.s.status + "</span></td></tr>"; }).join("") +
-      "</tbody></table></div>" + (list.length ? "" : '<div class="empty">No matches.</div>');
-  };
-
-  VIEWS.followups = function () {
-    var fu = followups();
-    return '<div class="panel"><h2>Follow-ups<span class="sub">replies, reminders, payments, reviews and rebooks</span></h2>' + (fu.length ? fu.map(fuRow).join("") : '<div class="empty">Nothing to follow up on. You are all caught up.</div>') + "</div>";
-  };
-
-  VIEWS.settings = function () {
-    var s = db.settings;
-    return '<form id="setForm"><div class="grid two" style="align-items:start">' +
-      '<div class="grid">' +
-        '<div class="panel"><h2>Business</h2><div class="f"><div class="fld"><label>Business name (used in texts)</label><input type="text" name="business" value="' + esc(s.business) + '"></div><div class="fld"><label>Rebook nudge after (days)</label><input type="number" min="14" name="rebookDays" value="' + esc(s.rebookDays) + '"></div><div class="fld full"><label>Google review link</label><input type="text" name="reviewLink" placeholder="https://g.page/r/…" value="' + esc(s.reviewLink) + '"></div></div></div>' +
-        '<div class="panel"><h2>Packages &amp; pricing</h2><div id="pkgRows">' + s.packages.map(function (p) { return '<div class="set-row"><input type="text" name="pkgName" value="' + esc(p.name) + '"><input type="number" min="0" name="pkgPrice" value="' + esc(p.price) + '"><button type="button" class="x" data-act="rmRow" title="Remove">×</button></div>'; }).join("") + '</div><button type="button" class="btn btn-ghost btn-sm" data-act="addRow" data-t="pkg">+ Add package</button>' +
-          '<hr class="sep"><h2>Add-ons <span class="sub">price 0 = quote per car</span></h2><div id="addRows">' + s.addons.map(function (p) { return '<div class="set-row"><input type="text" name="addName" value="' + esc(p.name) + '"><input type="number" min="0" name="addPrice" value="' + esc(p.price) + '"><button type="button" class="x" data-act="rmRow" title="Remove">×</button></div>'; }).join("") + '</div><button type="button" class="btn btn-ghost btn-sm" data-act="addRow" data-t="add">+ Add add-on</button></div>' +
-      "</div>" +
-      '<div class="grid">' +
-        '<div class="panel"><h2>Text templates <span class="sub">{first} {vehicle} {package} {price} {date} {time} {location} {business} {reviewLink}</span></h2>' + Object.keys(TPL_LABEL).map(function (k) { return '<div class="fld set-tpl"><label>' + TPL_LABEL[k] + '</label><textarea name="tpl_' + k + '">' + esc(s.templates[k]) + "</textarea></div>"; }).join("") + "</div>" +
-        '<div class="panel"><h2>Data &amp; backup</h2><p class="muted" style="font-size:.86rem;margin-bottom:12px">Everything is stored in <b>this browser on this device</b>. Download a backup regularly, and use Restore to move your data to another phone or computer.</p>' +
-          '<div class="msgs"><button type="button" class="btn btn-ghost btn-sm" data-act="backup">Download backup (.json)</button><label class="btn btn-ghost btn-sm" style="cursor:pointer">Restore backup<input type="file" accept=".json" id="restoreFile" hidden></label><button type="button" class="btn btn-ghost btn-sm" data-act="exportCSV" data-t="customers">Customers (.csv)</button><button type="button" class="btn btn-ghost btn-sm" data-act="exportCSV" data-t="jobs">Jobs (.csv)</button></div>' +
-          '<hr class="sep"><div class="lbl" style="margin-bottom:6px">Import website form submissions</div><p class="muted" style="font-size:.82rem;margin-bottom:10px">In Netlify: Forms → booking → Export CSV. Each row becomes a New Lead. Duplicates are skipped.</p><label class="btn btn-ghost btn-sm" style="cursor:pointer">Choose CSV…<input type="file" accept=".csv" id="importFile" hidden></label>' +
-          (db.jobs.some(function (j) { return j.sample; }) || db.customers.some(function (c) { return c.sample; }) ? '<hr class="sep"><button type="button" class="btn btn-danger btn-sm" data-act="clearSample">Remove sample data</button>' : "") +
-        "</div>" +
-      "</div></div>" +
-      '<div class="actions"><button class="btn btn-pink" type="submit">Save settings</button></div></form>';
-  };
-
-  var TITLES = { dashboard: "Dashboard", pipeline: "Pipeline", schedule: "Schedule", customers: "Customers", followups: "Follow-ups", settings: "Settings" };
-  var NAV = [["dashboard", "dash", "Dashboard"], ["pipeline", "pipe", "Pipeline"], ["schedule", "cal", "Schedule"], ["customers", "users", "Customers"], ["followups", "bell", "Follow-ups"], ["settings", "set", "Settings"]];
-
-  function render() {
-    var n = followups().length;
-    $("#nav").innerHTML = NAV.map(function (x) { return '<button data-act="goto" data-view="' + x[0] + '" class="' + (state.view === x[0] ? "on" : "") + '">' + icon(x[1]) + "<span>" + x[2] + "</span>" + (x[0] === "followups" && n ? '<span class="badge">' + n + "</span>" : "") + "</button>"; }).join("");
-    $("#title").textContent = TITLES[state.view];
-    $("#view").innerHTML = VIEWS[state.view]();
-    var lb = db.settings.lastBackup;
-    $("#soBtn").hidden = !(cloud.on && cloud.user);
-    $("#bkStatus").textContent = cloud.on ? (cloud.ready ? "Synced · " + (cloud.user ? cloud.user.email : "") : "Connecting…") : memOnly ? "⚠ Browser storage blocked. Data will be lost on close." : lb ? "Last backup: " + nice(lb.slice(0, 10)) : "No backup yet";
-  }
-
-  /* ================================ modals ================================ */
-  function openModal(html, cls, level) { $(level === 2 ? "#modal2" : "#modal").innerHTML = '<div class="scrim" data-act="scrim' + (level === 2 ? "2" : "") + '"><div class="sheet ' + (cls || "") + '" role="dialog" aria-modal="true">' + html + "</div></div>"; }
-  function closeModal(level) { $(level === 2 ? "#modal2" : "#modal").innerHTML = ""; }
-  function toast(msg) { var t = $("#toast"); t.textContent = msg; t.classList.add("on"); clearTimeout(toast._t); toast._t = setTimeout(function () { t.classList.remove("on"); }, 2200); }
-  function confirmBox(msg, label, fn) {
-    openModal('<div class="sheet-h"><h2>Are you sure?</h2></div><p class="muted">' + esc(msg) + '</p><div class="actions"><button class="btn btn-danger" data-act="confirmYes">' + esc(label) + '</button><button class="btn btn-ghost" data-act="closeModal2">Cancel</button></div>', "sm", 2);
-    confirmBox.fn = fn;
-  }
-
-  function pkgOptions(sel) {
-    var names = db.settings.packages.map(function (p) { return p.name; });
-    var o = '<option value="">Not sure / custom</option>' + db.settings.packages.map(function (p) { return '<option value="' + esc(p.name) + '"' + (sel === p.name ? " selected" : "") + ">" + esc(p.name) + " — " + money(p.price) + "</option>"; }).join("");
-    if (sel && names.indexOf(sel) < 0) o += '<option value="' + esc(sel) + '" selected>' + esc(sel) + "</option>";
-    return o;
-  }
-
-  function jobModal(j, isNew) {
-    var c = cust(j.customerId);
-    if (isNew) c = { name: "", phone: "", email: "" };
-    var addons = j.addons || [];
-    var existing = !isNew;
-    var html = '<div class="sheet-h"><h2>' + (isNew ? "New lead" : esc(c.name)) + '</h2>' + (existing ? '<span class="tag ' + ({ new: "pink", quoted: "amber", booked: "blue", completed: "green", lost: "" }[j.stage]) + '">' + stageLabel(j.stage) + "</span>" : "") + '<button class="x" data-act="closeModal" aria-label="Close">×</button></div>' +
-      '<form id="jobForm" data-id="' + (isNew ? "" : j.id) + '" data-cust="' + esc(j.customerId || "") + '"><div class="f">' +
-      '<div class="fld"><label>Name</label><input type="text" name="name" required value="' + esc(c.name) + '" autocomplete="off"></div>' +
-      '<div class="fld"><label>Mobile</label><input type="tel" name="phone" value="' + esc(c.phone) + '" autocomplete="off"></div>' +
-      '<div class="fld"><label>Email</label><input type="email" name="email" value="' + esc(c.email || "") + '"></div>' +
-      '<div class="fld"><label>Source</label><select name="source">' + SOURCES.map(function (s) { return "<option" + (s === (j.source || "Call / text") ? " selected" : "") + ">" + s + "</option>"; }).join("") + "</select></div>" +
-      '<div class="fld"><label>Vehicle (year / make / model)</label><input type="text" name="vehicle" value="' + esc(j.vehicle || "") + '" placeholder="2021 Toyota RAV4"></div>' +
-      '<div class="fld"><label>Size</label><select name="size">' + SIZES.map(function (s) { return "<option" + (s === (j.size || SIZES[0]) ? " selected" : "") + ">" + s + "</option>"; }).join("") + "</select></div>" +
-      '<div class="fld"><label>Package</label><select name="package" id="f_pkg">' + pkgOptions(j.package) + "</select></div>" +
-      '<div class="fld"><label>Price ($)</label><input type="number" min="0" step="1" name="price" id="f_price" value="' + esc(j.price || "") + '"></div>' +
-      '<div class="fld full"><label>Add-ons</label><div class="chk" id="f_addons">' + db.settings.addons.map(function (a) { return '<label><input type="checkbox" name="addon" value="' + esc(a.name) + '"' + (addons.indexOf(a.name) > -1 ? " checked" : "") + ">" + esc(a.name) + (a.price ? " +" + money(a.price) : "") + "</label>"; }).join("") + "</div></div>" +
-      '<div class="fld"><label>Stage</label><select name="stage">' + STAGES.map(function (s) { return '<option value="' + s.id + '"' + (s.id === (j.stage || "new") ? " selected" : "") + ">" + s.label + "</option>"; }).join("") + "</select></div>" +
-      '<div class="fld"><label>Date</label><input type="date" name="date" value="' + esc(j.date || "") + '"></div>' +
-      '<div class="fld"><label>Time</label><input type="time" name="time" value="' + esc(j.time || "") + '"></div>' +
-      '<div class="fld"><label>Location / "drop off"</label><input type="text" name="location" value="' + esc(j.location || "") + '" placeholder="Address or drop off"></div>' +
-      '<div class="fld full"><label>Notes</label><textarea name="notes" placeholder="Pet hair, stains, gate code, parking…">' + esc(j.notes || "") + "</textarea></div>" +
-      "</div>" +
-      '<hr class="sep"><div class="f">' +
-      '<div class="fld"><label>Payment</label><select name="paid"><option value="">Not paid yet</option><option value="1"' + (j.paid ? " selected" : "") + ">Paid</option></select></div>" +
-      '<div class="fld"><label>Method</label><select name="payMethod">' + PAY.map(function (p) { return "<option" + (p === (j.payMethod || "Cash") ? " selected" : "") + ">" + p + "</option>"; }).join("") + "</select></div>" +
-      '<div class="fld"><label>Tip ($)</label><input type="number" min="0" step="1" name="tip" value="' + esc(j.tip || "") + '"></div>' +
-      "</div>" +
-      (existing ? '<hr class="sep"><div class="lbl">Send a text</div><div class="msgs">' + Object.keys(TPL_LABEL).map(function (k) { return '<button type="button" class="btn btn-ghost btn-sm" data-act="msg" data-job="' + j.id + '" data-tpl="' + k + '">' + TPL_LABEL[k] + "</button>"; }).join("") + "</div>" : "") +
-      '<div class="actions"><button class="btn btn-pink" type="submit">' + (isNew ? "Add lead" : "Save changes") + '</button><button type="button" class="btn btn-ghost" data-act="closeModal">Cancel</button>' +
-      (existing ? '<button type="button" class="btn btn-danger btn-sm sp" data-act="delJob" data-id="' + j.id + '">Delete</button>' : "") + "</div></form>";
-    openModal(html, "", 1);
-    var p = $("#f_price");
-    if (p) p.dataset.manual = (existing && Number(j.price) && Number(j.price) !== calcPrice()) ? "1" : "";
-    setTimeout(function () { var n = $("#jobForm input[name=name]"); if (n && isNew) n.focus(); }, 30);
-  }
-
-  function calcPrice() {
-    var pk = $("#f_pkg"), t = pk ? pkgPrice(pk.value) : 0;
-    document.querySelectorAll("#f_addons input:checked").forEach(function (cb) { t += addonPrice(cb.value); });
-    return t;
-  }
-
-  function saveJobForm(form) {
-    var fd0 = new FormData(form), g = function (k) { return String(fd0.get(k) || "").trim(); };
-    var id = form.dataset.id, name = g("name");
-    if (!name) return;
-    var phone = g("phone"), c = null;
-    var cid = form.dataset.cust;
-    if (cid) c = db.customers.filter(function (x) { return x.id === cid; })[0];
-    if (!c && digits(phone).length >= 7) c = db.customers.filter(function (x) { return digits(x.phone) === digits(phone); })[0];
-    if (!c) c = db.customers.filter(function (x) { return x.name.toLowerCase() === name.toLowerCase(); })[0];
-    if (!c) { c = { id: uid(), name: name, phone: phone, email: g("email"), vehicles: [], notes: "", created: nowISO() }; db.customers.push(c); }
-    else { c.name = name; if (phone) c.phone = phone; if (g("email")) c.email = g("email"); }
-    c.vehicles = c.vehicles || [];
-    if (g("vehicle") && c.vehicles.indexOf(g("vehicle")) < 0) c.vehicles.push(g("vehicle"));
-    var j = id ? job(id) : null, isNew = !j;
-    if (!j) { j = { id: uid(), created: nowISO() }; db.jobs.push(j); }
-    var prevStage = j.stage, wasPaid = j.paid;
-    j.customerId = c.id; j.vehicle = g("vehicle"); j.size = g("size"); j.package = g("package");
-    j.addons = fd0.getAll("addon"); j.price = Number(g("price")) || 0; j.stage = g("stage") || "new";
-    j.date = g("date"); j.time = g("time"); j.location = g("location"); j.notes = g("notes"); j.source = g("source");
-    j.paid = g("paid") === "1"; j.payMethod = g("payMethod"); j.tip = Number(g("tip")) || 0;
-    if (j.paid && !wasPaid) j.paidAt = nowISO();
-    if (j.paid && j.stage !== "completed") { j.stage = "completed"; if (!j.date) j.date = today(); }
-    if (prevStage !== j.stage) j.updated = nowISO(); else j.updated = j.updated || nowISO();
-    save(); closeModal(1); render(); toast(isNew ? "Lead added" : "Saved");
-  }
-
-  function custModal(c) {
-    var s = custStats(c);
-    var html = '<div class="sheet-h"><h2>' + esc(c.name) + '</h2><span class="tag ' + s.cls + '">' + s.status + '</span><button class="x" data-act="closeModal" aria-label="Close">×</button></div>' +
-      '<div class="grid kpis" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px"><div class="panel kpi" style="padding:12px"><div class="lab">Jobs</div><div class="val" style="font-size:1.4rem">' + s.done.length + '</div></div><div class="panel kpi c" style="padding:12px"><div class="lab">Lifetime</div><div class="val" style="font-size:1.4rem">' + money(s.life) + '</div></div><div class="panel kpi" style="padding:12px"><div class="lab">Last detail</div><div class="val" style="font-size:1rem;padding-top:6px">' + (s.last ? esc(nice(s.last)) : "–") + "</div></div></div>" +
-      '<form id="custForm" data-id="' + c.id + '"><div class="f">' +
-      '<div class="fld"><label>Name</label><input type="text" name="name" required value="' + esc(c.name) + '"></div><div class="fld"><label>Mobile</label><input type="tel" name="phone" value="' + esc(c.phone) + '"></div>' +
-      '<div class="fld"><label>Email</label><input type="email" name="email" value="' + esc(c.email || "") + '"></div><div class="fld"><label>Vehicles (comma separated)</label><input type="text" name="vehicles" value="' + esc((c.vehicles || []).join(", ")) + '"></div>' +
-      '<div class="fld full"><label>Notes (preferences, gate codes, pets…)</label><textarea name="notes">' + esc(c.notes || "") + "</textarea></div></div>" +
-      '<div class="msgs" style="margin-top:14px">' + (c.phone ? '<a class="btn btn-ghost btn-sm" href="tel:' + digits(c.phone) + '">Call</a><button type="button" class="btn btn-ghost btn-sm" data-act="msg" data-cust="' + c.id + '" data-tpl="rebook">Text rebook nudge</button>' : "") + '<button type="button" class="btn btn-ghost btn-sm" data-act="newJob" data-cust="' + c.id + '">+ New job</button></div>' +
-      '<hr class="sep"><div class="lbl" style="margin-bottom:6px">History</div>' + (s.jobs.length ? s.jobs.slice().sort(function (a, b) { return (b.date || b.created) < (a.date || a.created) ? -1 : 1; }).map(function (j) { return '<div class="row click" data-act="editJob" data-id="' + j.id + '"><span class="dot ' + ({ new: "pink", quoted: "amber", booked: "", completed: "green", lost: "red" }[j.stage]) + '"></span><div class="grow"><div class="t">' + esc([j.package || "No package", j.vehicle].filter(Boolean).join(" · ")) + '</div><div class="s">' + stageLabel(j.stage) + (j.date ? " · " + esc(nice(j.date)) : "") + '</div></div><b>' + money(j.price) + "</b></div>"; }).join("") : '<div class="empty">No jobs yet.</div>') +
-      '<div class="actions"><button class="btn btn-pink" type="submit">Save</button><button type="button" class="btn btn-ghost" data-act="closeModal">Close</button><button type="button" class="btn btn-danger btn-sm sp" data-act="delCust" data-id="' + c.id + '">Delete customer</button></div></form>';
-    openModal(html, "", 1);
-  }
-
-  /* ---- messaging ---- */
-  function fillTpl(key, j, c) {
-    var s = db.settings, first = (c.name || "").trim().split(/\s+/)[0] || "there";
-    var map = {
-      first: first, name: c.name || "", business: s.business, vehicle: (j && j.vehicle) || (c.vehicles && c.vehicles[0]) || "vehicle",
-      package: (j && j.package) || "detail", price: j && j.price ? money(j.price) : "$—", date: j && j.date ? niceLong(j.date) : "your appointment day",
-      time: j && j.time ? ftime(j.time) : "the scheduled time", location: (j && j.location) || "your address", reviewLink: s.reviewLink || "[add your review link in Settings]"
-    };
-    return String(s.templates[key] || DEFAULT_TPL[key]).replace(/\{(\w+)\}/g, function (m, k) { return k in map ? map[k] : m; });
-  }
-  function msgModal(jobId, custId, tpl) {
-    var j = jobId ? job(jobId) : null;
-    var c = j ? cust(j.customerId) : cust(custId);
-    if (!j && c) { j = db.jobs.filter(function (x) { return x.customerId === c.id; }).sort(function (a, b) { return (b.date || "") < (a.date || "") ? -1 : 1; })[0] || null; }
-    var text = fillTpl(tpl, j, c);
-    var html = '<div class="sheet-h"><h2>' + TPL_LABEL[tpl] + " · " + esc(c.name) + '</h2><button class="x" data-act="closeModal2" aria-label="Close">×</button></div>' +
-      '<div class="fld"><label>Message (edit before sending)</label><textarea id="msgText" style="min-height:130px">' + esc(text) + "</textarea></div>" +
-      '<p class="faint" style="font-size:.8rem;margin-top:8px">' + (c.phone ? "To " + esc(fmtPhone(c.phone)) : "No phone number on file for this customer.") + "</p>" +
-      '<div class="actions"><button class="btn btn-pink" data-act="sendSms" data-phone="' + esc(digits(c.phone)) + '" data-job="' + (j ? j.id : "") + '" data-tpl="' + tpl + '">Open in Messages</button><button class="btn btn-ghost" data-act="copyMsg" data-job="' + (j ? j.id : "") + '" data-tpl="' + tpl + '">Copy</button></div>';
-    openModal(html, "sm", 2);
-  }
-  function afterSend(jobId, tpl) {
-    var j = jobId ? job(jobId) : null;
-    if (j && tpl === "review") { j.reviewAsked = true; save(); render(); }
-  }
-
-  /* ================================ actions ================================ */
-  function moveJob(id, stage) {
-    var j = job(id); if (!j || j.stage === stage) return;
-    j.stage = stage; j.updated = nowISO();
-    if (stage === "completed" && !j.date) j.date = today();
-    save(); render(); toast("Moved to " + stageLabel(stage));
-    if (stage === "booked" && !j.date) jobModal(j, false);
-  }
-
-  function download(name, text, type) {
-    var a = document.createElement("a");
-    a.href = URL.createObjectURL(new Blob([text], { type: type || "text/plain" })); a.download = name;
-    document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
-  }
-  function csvCell(v) { v = v == null ? "" : String(v); return /[",\n\r]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
-  function toCSV(rows) { return rows.map(function (r) { return r.map(csvCell).join(","); }).join("\r\n"); }
-  function parseCSV(t) {
-    var rows = [], row = [], f = "", q = false;
-    for (var i = 0; i < t.length; i++) {
-      var ch = t[i];
-      if (q) { if (ch === '"') { if (t[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += ch; }
-      else if (ch === '"') q = true;
-      else if (ch === ",") { row.push(f); f = ""; }
-      else if (ch === "\n" || ch === "\r") { if (ch === "\r" && t[i + 1] === "\n") i++; row.push(f); f = ""; if (row.length > 1 || row[0] !== "") rows.push(row); row = []; }
-      else f += ch;
-    }
-    row.push(f); if (row.length > 1 || row[0] !== "") rows.push(row);
-    return rows;
-  }
-
-  function importCSV(text) {
-    var rows = parseCSV(text.replace(/^﻿/, ""));
-    if (rows.length < 2) { toast("That CSV looks empty"); return; }
-    var head = rows[0].map(function (h) { return h.trim().toLowerCase(); });
-    var col = function (r, names) { for (var i = 0; i < names.length; i++) { var ix = head.indexOf(names[i]); if (ix > -1 && r[ix]) return r[ix].trim(); } return ""; };
-    var added = 0, skipped = 0;
-    rows.slice(1).forEach(function (r) {
-      var name = col(r, ["name", "full name"]); if (!name) { skipped++; return; }
-      var phone = col(r, ["phone", "mobile number", "mobile"]), vehicle = col(r, ["vehicle", "year / make / model"]);
-      var created = col(r, ["created_at", "created", "date submitted"]); var cIso = created && !isNaN(new Date(created)) ? new Date(created).toISOString() : nowISO();
-      var dup = db.jobs.some(function (j) { var c = cust(j.customerId); return j.source === "Website form" && digits(c.phone) === digits(phone) && (j.vehicle || "") === vehicle && (j.created || "").slice(0, 10) === cIso.slice(0, 10); });
-      if (dup) { skipped++; return; }
-      var c = digits(phone).length >= 7 ? db.customers.filter(function (x) { return digits(x.phone) === digits(phone); })[0] : null;
-      if (!c) { c = { id: uid(), name: name, phone: phone, email: col(r, ["email"]), vehicles: [], notes: "", created: cIso }; db.customers.push(c); }
-      c.vehicles = c.vehicles || []; if (vehicle && c.vehicles.indexOf(vehicle) < 0) c.vehicles.push(vehicle);
-      var svc = col(r, ["service", "package"]).replace(/\s*\(\$\d+\)\s*$/, "");
-      var date = col(r, ["date", "preferred date"]);
-      db.jobs.push({ id: uid(), customerId: c.id, vehicle: vehicle, size: col(r, ["size", "vehicle size"]), package: svc, addons: [], price: pkgPrice(svc), stage: "new", date: /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : "", time: "", location: col(r, ["location", "where"]), notes: col(r, ["message", "notes"]), source: "Website form", created: cIso, updated: cIso });
-      added++;
-    });
-    save(); render(); toast(added + " lead" + (added === 1 ? "" : "s") + " imported" + (skipped ? ", " + skipped + " skipped" : ""));
-  }
-
-  function sampleData() {
-    var t = today(), P = "513555", seq = 0;
-    var people = [["Marcus Bell", "2021 Toyota RAV4", "Loveland, OH"], ["Jenna Ortiz", "2019 BMW X4", "Hyde Park, Cincinnati"], ["Tom Hendricks", "2022 Ford F-150", "Mason, OH"], ["Priya Nair", "2020 Honda Odyssey", "West Chester, OH"], ["Dave Kowalski", "2018 Porsche Macan", "Fort Thomas, KY"], ["Ashley Brooks", "2023 Tesla Model Y", "Covington, KY"], ["Chris Yoder", "2017 Jeep Grand Cherokee", "Anderson Twp, OH"], ["Megan Fischer", "2021 Subaru Outback", "Montgomery, OH"], ["Luis Ramirez", "2016 Chevy Silverado", "Florence, KY"], ["Katie O'Connor", "2022 Kia Telluride", "Milford, OH"]];
-    var cs = people.map(function (p, i) { var c = { id: uid(), name: p[0], phone: "(513) 555-01" + String(10 + i * 7).slice(-2), email: "", vehicles: [p[1]], notes: "", created: nowISO(), sample: true }; db.customers.push(c); return c; });
-    // [customer idx, package, stage, day offset, time, paid, source, addons]
-    var plan = [[0, "Full Detail: sedan/SUV", "completed", -75, "10:00", 1, "Website form", []], [1, "Platinum Interior", "completed", -66, "13:00", 1, "Instagram", ["Pet hair removal"]], [2, "Full Detail: truck", "completed", -41, "09:00", 1, "Referral", []], [3, "Platinum Interior", "completed", -33, "11:00", 1, "Website form", ["Seat extraction"]], [4, "Full Detail: sedan/SUV", "completed", -19, "14:00", 1, "Instagram", []], [5, "Basic Exterior", "completed", -12, "10:30", 1, "Call / text", []], [6, "Platinum Exterior", "completed", -6, "15:00", 1, "Website form", []], [0, "Basic Interior", "completed", -3, "12:00", 0, "Repeat customer", []], [7, "Platinum Interior", "completed", -2, "09:30", 0, "Referral", ["Pet hair removal"]], [1, "Full Detail: sedan/SUV", "booked", 1, "10:00", 0, "Repeat customer", []], [8, "Full Detail: truck", "booked", 2, "13:30", 0, "Website form", []], [9, "Platinum Interior", "booked", 4, "11:00", 0, "Instagram", ["Seat extraction"]], [3, "Basic Exterior", "booked", 9, "09:00", 0, "Call / text", []], [2, "Platinum Exterior", "quoted", 0, "", 0, "Call / text", []], [5, "Full Detail: sedan/SUV", "quoted", 0, "", 0, "Website form", []], [6, "Basic Interior", "new", 0, "", 0, "Website form", []], [9, "Basic Exterior", "new", 0, "", 0, "Instagram", []], [4, "Platinum Interior", "lost", 0, "", 0, "Call / text", []]];
-    plan.forEach(function (p, i) {
-      var c = cs[p[0]], pr = pkgPrice(p[1]);
-      var off = p[2] === "quoted" ? -3 : p[2] === "new" ? 0 : 0;
-      var created = new Date(Date.now() - (p[3] < 0 ? Math.abs(p[3]) + 3 : (p[2] === "quoted" ? 4 : p[2] === "new" ? 0 : 2)) * 864e5).toISOString();
-      var upd = p[2] === "quoted" ? new Date(Date.now() - 3 * 864e5).toISOString() : created;
-      db.jobs.push({ id: uid(), customerId: c.id, vehicle: c.vehicles[0], size: "Car / sedan / coupe", package: p[1], addons: p[7], price: pr, stage: p[2], date: (p[2] === "completed" || p[2] === "booked") ? addDays(t, p[3]) : "", time: p[4], location: people[p[0]][2], notes: "", source: p[6], paid: !!p[5], payMethod: ["Venmo", "Cash", "Zelle", "Card"][i % 4], tip: p[5] && i % 3 === 0 ? 10 : 0, paidAt: p[5] ? created : undefined, created: created, updated: upd, sample: true });
-    });
-    save(); render(); toast("Sample data loaded");
-  }
-
-  /* ============================== event wiring ============================ */
-  document.addEventListener("click", function (e) {
-    if (e.target.closest("[data-stop]")) { e.stopPropagation(); return; }
-    var el = e.target.closest("[data-act]"); if (!el) return;
-    var a = el.dataset.act, id = el.dataset.id;
-    if (a === "scrim") { if (e.target === el) closeModal(1); return; }
-    if (a === "scrim2") { if (e.target === el) closeModal(2); return; }
-    switch (a) {
-      case "goto": state.view = el.dataset.view; if (state.view !== "pipeline" && state.view !== "customers" && state.view !== "schedule") { /* keep search */ } render(); window.scrollTo(0, 0); break;
-      case "newJob": {
-        var j0 = { stage: el.dataset.date ? "booked" : "new", source: "Call / text", date: el.dataset.date || "", customerId: el.dataset.cust || "" };
-        if (el.dataset.cust) { var cc = cust(el.dataset.cust); j0.vehicle = (cc.vehicles || [])[0] || ""; closeModal(1); jobModal(j0, false); var f = $("#jobForm"); if (f) { f.dataset.id = ""; $(".sheet-h h2").textContent = "New job · " + cc.name; } }
-        else jobModal(j0, true);
-        break;
-      }
-      case "editJob": var jj = job(id); if (jj) jobModal(jj, false); break;
-      case "openCust": var c0 = db.customers.filter(function (x) { return x.id === id; })[0]; if (c0) custModal(c0); break;
-      case "closeModal": closeModal(1); break;
-      case "closeModal2": closeModal(2); break;
-      case "advance": moveJob(id, { new: "quoted", quoted: "booked", booked: "completed" }[job(id).stage]); break;
-      case "markPaid": var jp = job(id); if (jp) { jp.paid = true; jp.paidAt = nowISO(); save(); render(); toast("Marked paid"); } break;
-      case "snooze": var cs0 = db.customers.filter(function (x) { return x.id === id; })[0]; if (cs0) { cs0.snoozeUntil = addDays(today(), 30); save(); render(); toast("Snoozed for 30 days"); } break;
-      case "wk": state.weekStart = el.dataset.n === "0" ? weekStartOf(today()) : addDays(state.weekStart, Number(el.dataset.n)); render(); break;
-      case "msg": msgModal(el.dataset.job, el.dataset.cust, el.dataset.tpl); break;
-      case "sendSms": {
-        var body = $("#msgText").value;
-        window.location.href = "sms:" + el.dataset.phone + "?&body=" + encodeURIComponent(body);
-        afterSend(el.dataset.job, el.dataset.tpl); break;
-      }
-      case "copyMsg": {
-        var txt = $("#msgText"); txt.select();
-        var done = function () { toast("Copied"); afterSend(el.dataset.job, el.dataset.tpl); };
-        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt.value).then(done, function () { document.execCommand("copy"); done(); });
-        else { document.execCommand("copy"); done(); }
-        break;
-      }
-      case "delJob": confirmBox("Delete this job? This can't be undone.", "Delete job", function () { db.jobs = db.jobs.filter(function (x) { return x.id !== id; }); save(); closeModal(1); closeModal(2); render(); toast("Job deleted"); }); break;
-      case "delCust": confirmBox("Delete this customer and all of their jobs? This can't be undone.", "Delete customer", function () { db.jobs = db.jobs.filter(function (x) { return x.customerId !== id; }); db.customers = db.customers.filter(function (x) { return x.id !== id; }); save(); closeModal(1); closeModal(2); render(); toast("Customer deleted"); }); break;
-      case "confirmYes": if (confirmBox.fn) confirmBox.fn(); break;
-      case "backup": db.settings.lastBackup = nowISO(); save(); download("led-crm-backup-" + today() + ".json", JSON.stringify(db, null, 2), "application/json"); render(); toast("Backup downloaded"); break;
-      case "exportCSV":
-        if (el.dataset.t === "customers") download("led-customers-" + today() + ".csv", toCSV([["Name", "Phone", "Email", "Vehicles", "Jobs", "Lifetime paid", "Last detail", "Status", "Notes"]].concat(db.customers.map(function (c) { var s = custStats(c); return [c.name, c.phone, c.email, (c.vehicles || []).join("; "), s.done.length, s.life, s.last, s.status, c.notes]; }))), "text/csv");
-        else download("led-jobs-" + today() + ".csv", toCSV([["Customer", "Phone", "Vehicle", "Package", "Add-ons", "Price", "Tip", "Stage", "Date", "Time", "Location", "Paid", "Method", "Source", "Notes"]].concat(db.jobs.map(function (j) { var c = cust(j.customerId); return [c.name, c.phone, j.vehicle, j.package, (j.addons || []).join("; "), j.price, j.tip, j.stage, j.date, j.time, j.location, j.paid ? "yes" : "no", j.payMethod, j.source, j.notes]; }))), "text/csv");
-        break;
-      case "sample": sampleData(); break;
-      case "signout": if (cloud.on) firebase.auth().signOut(); break;
-      case "clearSample": confirmBox("Remove all sample customers and jobs? Your real data stays.", "Remove sample data", function () { db.jobs = db.jobs.filter(function (x) { return !x.sample; }); db.customers = db.customers.filter(function (x) { return !x.sample; }); save(); closeModal(2); render(); toast("Sample data removed"); }); break;
-      case "addRow": {
-        var wrap = $(el.dataset.t === "pkg" ? "#pkgRows" : "#addRows"), div = document.createElement("div");
-        div.className = "set-row"; var nm = el.dataset.t === "pkg" ? "pkg" : "add";
-        div.innerHTML = '<input type="text" name="' + nm + 'Name" placeholder="Name"><input type="number" min="0" name="' + nm + 'Price" value="0"><button type="button" class="x" data-act="rmRow" title="Remove">×</button>';
-        wrap.appendChild(div); div.firstChild.focus(); break;
-      }
-      case "rmRow": el.closest(".set-row").remove(); break;
-    }
-  });
-
-  document.addEventListener("submit", function (e) {
-    var f = e.target;
-    if (f.id === "jobForm") { e.preventDefault(); saveJobForm(f); }
-    else if (f.id === "custForm") {
-      e.preventDefault();
-      var c = db.customers.filter(function (x) { return x.id === f.dataset.id; })[0], d = new FormData(f);
-      c.name = String(d.get("name")).trim() || c.name; c.phone = String(d.get("phone")).trim(); c.email = String(d.get("email")).trim();
-      c.vehicles = String(d.get("vehicles")).split(",").map(function (x) { return x.trim(); }).filter(Boolean); c.notes = String(d.get("notes"));
-      save(); closeModal(1); render(); toast("Customer saved");
-    } else if (f.id === "setForm") {
-      e.preventDefault();
-      var fdata = new FormData(f), s = db.settings;
-      s.business = String(fdata.get("business")).trim() || "LED Detailing"; s.reviewLink = String(fdata.get("reviewLink")).trim(); s.rebookDays = Math.max(14, Number(fdata.get("rebookDays")) || 60);
-      var zip = function (n, p) { var ns = fdata.getAll(n), ps = fdata.getAll(p), out = []; ns.forEach(function (x, i) { x = String(x).trim(); if (x) out.push({ name: x, price: Number(ps[i]) || 0 }); }); return out; };
-      s.packages = zip("pkgName", "pkgPrice"); s.addons = zip("addName", "addPrice");
-      Object.keys(TPL_LABEL).forEach(function (k) { var v = String(fdata.get("tpl_" + k) || "").trim(); s.templates[k] = v || DEFAULT_TPL[k]; });
-      save(); render(); toast("Settings saved");
-    }
-  });
-
-  document.addEventListener("input", function (e) {
-    var t = e.target;
-    if (t.id === "q") { state.q = t.value; if (["pipeline", "customers", "schedule"].indexOf(state.view) < 0 && t.value) state.view = "pipeline"; render(); return; }
-    if (t.id === "f_price") t.dataset.manual = "1";
-  });
-  document.addEventListener("change", function (e) {
-    var t = e.target;
-    if (t.id === "f_pkg" || (t.name === "addon" && t.closest("#f_addons"))) { var p = $("#f_price"); if (p && !p.dataset.manual) { var v = calcPrice(); p.value = v || ""; } }
-    if (t.name === "stage" && t.closest("#jobForm") && t.value === "completed" && !$("#jobForm input[name=date]").value) $("#jobForm input[name=date]").value = today();
-    if (t.id === "restoreFile" && t.files[0]) {
-      var r = new FileReader(); r.onload = function () { try { var d = JSON.parse(r.result); if (!d.jobs || !d.customers) throw 0; confirmBox("Replace everything in this CRM with the backup file? Current data will be overwritten.", "Restore backup", function () { db = Object.assign(defaults(), d); db.settings = Object.assign(defaults().settings, d.settings || {}); db.settings.templates = Object.assign(defaults().settings.templates, (d.settings || {}).templates || {}); save(); closeModal(2); render(); toast("Backup restored"); }); } catch (err) { toast("That doesn't look like a CRM backup"); } };
-      r.readAsText(t.files[0]); t.value = "";
-    }
-    if (t.id === "importFile" && t.files[0]) { var r2 = new FileReader(); r2.onload = function () { importCSV(String(r2.result)); }; r2.readAsText(t.files[0]); t.value = ""; }
-  });
-
-  /* drag & drop on the board */
-  var dragId = null;
-  document.addEventListener("dragstart", function (e) { var c = e.target.closest && e.target.closest(".card"); if (!c) return; dragId = c.dataset.id; c.classList.add("dragging"); e.dataTransfer.effectAllowed = "move"; try { e.dataTransfer.setData("text/plain", dragId); } catch (x) {} });
-  document.addEventListener("dragend", function () { dragId = null; document.querySelectorAll(".dragging,.over").forEach(function (x) { x.classList.remove("dragging", "over"); }); });
-  document.addEventListener("dragover", function (e) { var col = e.target.closest && e.target.closest(".col"); if (col && dragId) { e.preventDefault(); document.querySelectorAll(".col.over").forEach(function (x) { if (x !== col) x.classList.remove("over"); }); col.classList.add("over"); } });
-  document.addEventListener("drop", function (e) { var col = e.target.closest && e.target.closest(".col"); if (col && dragId) { e.preventDefault(); var id = dragId; dragId = null; moveJob(id, col.dataset.stage); } });
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape") { if ($("#modal2").innerHTML) closeModal(2); else closeModal(1); } });
-
-  /* day rollover: refresh when the tab regains focus */
-  document.addEventListener("visibilitychange", function () { if (!document.hidden) render(); });
-
-  /* ============================== cloud sync ============================== */
-  function canon(o) { return JSON.stringify(o, function (k, v) { if (v && typeof v === "object" && !Array.isArray(v)) { return Object.keys(v).sort().reduce(function (a, key) { if (v[key] !== undefined) a[key] = v[key]; return a; }, {}); } return v; }); }
-  function clean(o) { return JSON.parse(JSON.stringify(o)); }
-
-  function pushDiff() {
-    if (!cloud.ready || !cloud.fs) return;
-    var ops = [];
-    ["customers", "jobs"].forEach(function (k) {
-      var seen = {};
-      db[k].forEach(function (o) {
-        seen[o.id] = 1;
-        var c = canon(o);
-        if (cloud.shadow[k][o.id] !== c) { cloud.shadow[k][o.id] = c; ops.push({ ref: cloud.fs.collection(k).doc(o.id), data: clean(o) }); }
-      });
-      Object.keys(cloud.shadow[k]).forEach(function (id) { if (!seen[id]) { delete cloud.shadow[k][id]; ops.push({ ref: cloud.fs.collection(k).doc(id), del: true }); } });
-    });
-    var sc = canon(db.settings);
-    if (sc !== cloud.shadow.settings) { cloud.shadow.settings = sc; ops.push({ ref: cloud.fs.collection("meta").doc("settings"), data: clean(db.settings) }); }
-    for (var i = 0; i < ops.length; i += 400) {
-      var batch = cloud.fs.batch();
-      ops.slice(i, i + 400).forEach(function (op) { if (op.del) batch.delete(op.ref); else batch.set(op.ref, op.data); });
-      batch.commit().catch(function (err) { console.error(err); toast("Couldn't save to the cloud. Check your connection."); });
-    }
-  }
-
-  function applySnap(k, snap) {
-    var arr = [], ids = {};
-    snap.forEach(function (d) { var o = d.data(); o.id = d.id; arr.push(o); ids[d.id] = 1; cloud.shadow[k][d.id] = canon(o); });
-    Object.keys(cloud.shadow[k]).forEach(function (id) { if (!ids[id]) delete cloud.shadow[k][id]; });
-    db[k] = arr;
-  }
-
-  function startListeners() {
-    var got = { customers: false, jobs: false, settings: false };
-    function check() {
-      if (cloud.ready || !(got.customers && got.jobs && got.settings)) return;
-      cloud.ready = true;
-      offerMigration();
-      pushDiff();               // writes default settings on a brand-new project
-      render();
-    }
-    function onErr(err) {
-      console.error(err);
-      var denied = err && err.code === "permission-denied";
-      $("#authErr").textContent = denied ? "This account isn't authorized for the CRM." : "Couldn't connect to the database.";
-      if (denied) firebase.auth().signOut();
-    }
-    cloud.unsubs.push(cloud.fs.collection("customers").onSnapshot(function (snap) { applySnap("customers", snap); got.customers = true; check(); if (cloud.ready) render(); }, onErr));
-    cloud.unsubs.push(cloud.fs.collection("jobs").onSnapshot(function (snap) {
-      var fresh = cloud.ready ? snap.docChanges().filter(function (c) { return c.type === "added" && !snap.metadata.hasPendingWrites && c.doc.data().source === "Website form" && Date.now() - new Date(c.doc.data().created).getTime() < 5 * 60e3; }) : [];
-      applySnap("jobs", snap); got.jobs = true; check(); if (cloud.ready) render();
-      fresh.forEach(function (c) { var jb = c.doc.data(); toast("New website lead: " + cust(jb.customerId).name); });
-    }, onErr));
-    cloud.unsubs.push(cloud.fs.collection("meta").doc("settings").onSnapshot(function (d) {
-      if (d.exists) { var s = d.data(), base = defaults().settings; Object.keys(s).forEach(function (k) { if (k !== "templates") base[k] = s[k]; }); Object.keys(s.templates || {}).forEach(function (k) { base.templates[k] = s.templates[k]; }); db.settings = base; cloud.shadow.settings = canon(db.settings); }
-      got.settings = true; check(); if (cloud.ready) render();
-    }, onErr));
-  }
-  function stopListeners() { cloud.unsubs.forEach(function (u) { u(); }); cloud.unsubs = []; }
-
-  function offerMigration() {
-    var has = localCache && (localCache.jobs.length || localCache.customers.length);
-    if (!has || db.jobs.length || db.customers.length) return;
-    confirmBox("This device has " + localCache.customers.length + " customers and " + localCache.jobs.length + " jobs saved locally. Upload them to the cloud CRM?", "Upload to cloud", function () {
-      db.customers = localCache.customers; db.jobs = localCache.jobs; db.settings = localCache.settings;
-      localCache = null; try { localStorage.removeItem(KEY); } catch (e) {}
-      save(); closeModal(2); render(); toast("Uploaded to the cloud");
-    });
-  }
-
-  function showAuth() { $("#auth").hidden = false; }
-  function hideAuth() { $("#auth").hidden = true; $("#authErr").textContent = ""; $("#authPw").value = ""; }
-  var AUTH_MSG = { "auth/invalid-credential": "Wrong email or password.", "auth/wrong-password": "Wrong email or password.", "auth/user-not-found": "Wrong email or password.", "auth/invalid-email": "Enter a valid email address.", "auth/too-many-requests": "Too many attempts. Try again in a few minutes.", "auth/network-request-failed": "No connection. Check your internet." };
-
-  function bootCloud() {
-    firebase.initializeApp({ apiKey: cfg.apiKey, authDomain: cfg.authDomain, projectId: cfg.projectId, appId: cfg.appId });
-    cloud.fs = firebase.firestore();
-    try { cloud.fs.enablePersistence({ synchronizeTabs: true }).catch(function () {}); } catch (e) {}
-    showAuth();
-    document.addEventListener("submit", function (e) {
-      if (e.target.id !== "authForm") return;
-      e.preventDefault(); $("#authErr").textContent = "";
-      firebase.auth().signInWithEmailAndPassword($("#authEmail").value.trim(), $("#authPw").value).catch(function (err) { $("#authErr").textContent = AUTH_MSG[err.code] || "Couldn't sign in. Try again."; });
-    });
-    $("#authReset").addEventListener("click", function () {
-      var em = $("#authEmail").value.trim();
-      if (!em) { $("#authErr").textContent = "Type your email above first."; return; }
-      firebase.auth().sendPasswordResetEmail(em).then(function () { $("#authErr").style.color = "var(--green)"; $("#authErr").textContent = "Password reset email sent."; }, function (err) { $("#authErr").style.color = ""; $("#authErr").textContent = AUTH_MSG[err.code] || "Couldn't send the reset email."; });
-    });
-    firebase.auth().onAuthStateChanged(function (u) {
-      if (u) { cloud.user = u; hideAuth(); render(); startListeners(); }
-      else { stopListeners(); cloud.user = null; cloud.ready = false; cloud.shadow = { customers: {}, jobs: {}, settings: "" }; db = defaults(); closeModal(1); closeModal(2); showAuth(); render(); }
-    });
-  }
-
-  if (cloud.on) bootCloud();
-  render();
-})();
-</script>
+  <script src="assets/script.js?v=2"></script>
+  <script src="assets/detailing.js?v=2"></script>
+  <script src="assets/led.js?v=2"></script>
 </body>
 </html>
